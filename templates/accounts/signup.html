@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up | Giile Pro{% endblock %}
+
+{% block content %}
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop"></div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+            <div class="mdc-card">
+                <div class="mdc-card__primary-action" tabindex="0">
+                    <div style="padding: 16px;">
+                        <h2 class="mdc-typography--headline6" style="margin-top: 0;">Create Your Account</h2>
+                    </div>
+                </div>
+                <div class="mdc-card__content" style="padding: 0 16px 16px 16px;">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mdc-layout-grid__inner">
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input class="mdc-text-field__input" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.username.id_for_label }}" class="mdc-floating-label">{{ form.username.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.username.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.username.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.username.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input type="email" class="mdc-text-field__input" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.email.id_for_label }}" class="mdc-floating-label">{{ form.email.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.email.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.email.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.email.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input class="mdc-text-field__input" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.first_name.id_for_label }}" class="mdc-floating-label">{{ form.first_name.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.first_name.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.first_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input class="mdc-text-field__input" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.last_name.id_for_label }}" class="mdc-floating-label">{{ form.last_name.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.last_name.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.last_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input type="tel" class="mdc-text-field__input" id="{{ form.phone_number.id_for_label }}" name="{{ form.phone_number.html_name }}">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.phone_number.id_for_label }}" class="mdc-floating-label">{{ form.phone_number.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.phone_number.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.phone_number.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.phone_number.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.phone_number.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input type="date" class="mdc-text-field__input" id="{{ form.date_of_birth.id_for_label }}" name="{{ form.date_of_birth.html_name }}">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.date_of_birth.id_for_label }}" class="mdc-floating-label">{{ form.date_of_birth.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.date_of_birth.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.date_of_birth.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.date_of_birth.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.date_of_birth.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                <div class="mdc-select mdc-select--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <div class="mdc-select__anchor">
+                                        <span class="mdc-notched-outline">
+                                            <span class="mdc-notched-outline__leading"></span>
+                                            <span class="mdc-notched-outline__notch">
+                                                <span class="mdc-floating-label">{{ form.user_type.label }}</span>
+                                            </span>
+                                            <span class="mdc-notched-outline__trailing"></span>
+                                        </span>
+                                        <span class="mdc-select__selected-text-container">
+                                            <span class="mdc-select__selected-text"></span>
+                                        </span>
+                                        <span class="mdc-select__dropdown-icon">
+                                            <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                                <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                                                <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                                        <ul class="mdc-list">
+                                            {% for value, text in form.user_type.field.choices %}
+                                                <li class="mdc-list-item" data-value="{{ value }}">
+                                                    <span class="mdc-list-item__ripple"></span>
+                                                    <span class="mdc-list-item__text">{{ text }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" name="{{ form.user_type.html_name }}" id="{{ form.user_type.id_for_label }}">
+                                </div>
+                                {% if form.user_type.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.user_type.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.user_type.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.user_type.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input type="password" class="mdc-text-field__input" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.password1.id_for_label }}" class="mdc-floating-label">{{ form.password1.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.password1.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.password1.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.password1.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.password1.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-phone">
+                                <div class="mdc-text-field mdc-text-field--outlined" style="width: 100%; margin-bottom: 16px;">
+                                    <input type="password" class="mdc-text-field__input" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ form.password2.id_for_label }}" class="mdc-floating-label">{{ form.password2.label }}</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if form.password2.errors %}
+                                    <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                        {{ form.password2.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.password2.help_text %}
+                                    <div class="mdc-typography--caption" style="margin-bottom: 16px;">
+                                        {{ form.password2.help_text }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mdc-form-field" style="margin: 24px 0;">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="terms_agreement" name="terms_agreement" required/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                            <label for="terms_agreement">I agree to the <a href="{% url 'core:terms' %}" target="_blank" style="color: #6200ee; text-decoration: none;">Terms of Service</a> and <a href="{% url 'core:privacy' %}" target="_blank" style="color: #6200ee; text-decoration: none;">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="mdc-button mdc-button--raised" style="width: 100%;">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Create Account</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="mdc-card__actions" style="padding: 16px; display: flex; justify-content: center;">
+                    <p class="mdc-typography--body2">Already have an account? <a href="{% url 'accounts:login' %}" class="mdc-typography--button" style="color: #6200ee; text-decoration: none;">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize text fields
+    document.querySelectorAll('.mdc-text-field').forEach(function(textField) {
+        mdc.textField.MDCTextField.attachTo(textField);
+    });
+    
+    // Initialize select field
+    const select = mdc.select.MDCSelect.attachTo(document.querySelector('.mdc-select'));
+    select.listen('MDCSelect:change', () => {
+        document.getElementById('{{ form.user_type.id_for_label }}').value = select.value;
+    });
+    
+    // Initialize checkbox
+    const checkbox = mdc.checkbox.MDCCheckbox.attachTo(document.querySelector('.mdc-checkbox'));
+    const formField = mdc.formField.MDCFormField.attachTo(document.querySelector('.mdc-form-field'));
+    formField.input = checkbox;
+</script>
+{% endblock %}

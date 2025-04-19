@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}{{ settings.core.SiteSettings.site_title }} - Contact Us{% endblock %}
+
+{% block content %}
+
+<style>
+    .contact-hero {
+        background-color: var(--mdc-theme-background);
+        padding: 64px 0;
+    }
+    
+    .contact-content {
+        padding: 64px 0;
+    }
+    
+    .form-field {
+        width: 100%;
+        margin-bottom: 24px;
+    }
+    
+    .form-error-message {
+        color: var(--mdc-theme-error);
+        margin-bottom: 16px;
+    }
+    
+    .contact-info {
+        margin-top: 32px;
+    }
+    
+    .contact-item {
+        display: flex;
+        margin-bottom: 24px;
+        align-items: flex-start;
+       
+    }
+    
+    .contact-icon {
+        font-size: 28px;
+        color: var(--mdc-theme-primary);
+        margin-right: 16px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(var(--mdc-theme-primary-rgb, 98, 0, 238), 0.1);
+        border-radius: 50%;
+        flex-shrink: 0;
+        padding: 0px 16px;
+    }
+    
+    .contact-details {
+        flex: 1;
+        padding-top: 4px;
+    }
+    
+    .contact-details h5 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        color: var(--mdc-theme-primary);
+    }
+    
+    .social-media-contact {
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
+    
+    .social-icons .fab {
+        color: var(--mdc-theme-primary);
+    }
+    
+    .map-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .map-container iframe {
+        width: 100%;
+        height: 450px;
+        border: 0;
+    }
+    
+    .map {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<section class="hero contact-hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="mdc-typography--headline2">Contact Us</h1>
+                <p class="mdc-typography--body1">We'd love to hear from you. Get in touch with our team.</p>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<section class="contact-content">
+    <div class="container">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <h2 class="mdc-typography--headline3">Get In Touch</h2>
+                    <p class="mdc-typography--body1">Have questions about our services? Interested in working with us? Fill out the form and we'll get back to you as soon as possible.</p>
+                    
+                    <form method="post" class="contact-form">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="form-error-message">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon form-field">
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">person</i>
+                            <input class="mdc-text-field__input" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.name.id_for_label }}" class="mdc-floating-label">Name</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.name.errors %}
+                        <div class="mdc-text-field-helper-line">
+                            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">
+                                {% for error in form.name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon form-field">
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">email</i>
+                            <input type="email" class="mdc-text-field__input" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.email.id_for_label }}" class="mdc-floating-label">Email</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.email.errors %}
+                        <div class="mdc-text-field-helper-line">
+                            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">
+                                {% for error in form.email.errors %}{{ error }}{% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon form-field">
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">subject</i>
+                            <input class="mdc-text-field__input" id="{{ form.subject.id_for_label }}" name="{{ form.subject.html_name }}" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.subject.id_for_label }}" class="mdc-floating-label">Subject</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.subject.errors %}
+                        <div class="mdc-text-field-helper-line">
+                            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">
+                                {% for error in form.subject.errors %}{{ error }}{% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mdc-text-field mdc-text-field--textarea mdc-text-field--outlined form-field">
+                            <textarea class="mdc-text-field__input" rows="8" id="{{ form.message.id_for_label }}" name="{{ form.message.html_name }}" required></textarea>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.message.id_for_label }}" class="mdc-floating-label">Message</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.message.errors %}
+                        <div class="mdc-text-field-helper-line">
+                            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">
+                                {% for error in form.message.errors %}{{ error }}{% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <button type="submit" class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__ripple"></span>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">send</i>
+                            <span class="mdc-button__label">Send Message</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <h2 class="mdc-typography--headline3">Contact Information</h2>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon" style="padding-top: 15px;">location_on</i>
+                            <div class="contact-details">
+                                <h5 class="mdc-typography--headline5">Address</h5>
+                                <p class="mdc-typography--body1">123 Entertainment Blvd<br>Los Angeles, CA 90001<br>United States</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon" style="padding-top: 15px;">phone</i>
+                            <div class="contact-details">
+                                <h5 class="mdc-typography--headline5">Phone</h5>
+                                <p class="mdc-typography--body1">+1 (123) 456-7890</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon" style="padding-top: 15px;">email</i>
+                            <div class="contact-details">
+                                <h5 class="mdc-typography--headline5">Email</h5>
+                                <p class="mdc-typography--body1">info@ggppro.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon" style="padding-top: 15px;">access_time</i>
+                            <div class="contact-details">
+                                <h5 class="mdc-typography--headline5">Business Hours</h5>
+                                <p class="mdc-typography--body1">Monday - Friday: 9:00 AM - 5:00 PM<br>Saturday - Sunday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-media-contact">
+                        <h5 class="mdc-typography--headline5">Follow Us</h5>
+                        <div class="social-icons">
+                            {% if settings.core.SiteSettings.facebook_url %}
+                            <a href="{{ settings.core.SiteSettings.facebook_url }}" class="mdc-icon-button" target="_blank">
+                                <div class="mdc-icon-button__ripple"></div>
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            {% endif %}
+                            {% if settings.core.SiteSettings.twitter_url %}
+                            <a href="{{ settings.core.SiteSettings.twitter_url }}" class="mdc-icon-button" target="_blank">
+                                <div class="mdc-icon-button__ripple"></div>
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            {% endif %}
+                            {% if settings.core.SiteSettings.instagram_url %}
+                            <a href="{{ settings.core.SiteSettings.instagram_url }}" class="mdc-icon-button" target="_blank">
+                                <div class="mdc-icon-button__ripple"></div>
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                            {% if settings.core.SiteSettings.youtube_url %}
+                            <a href="{{ settings.core.SiteSettings.youtube_url }}" class="mdc-icon-button" target="_blank">
+                                <div class="mdc-icon-button__ripple"></div>
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<section style="margin-bottom: -60px;">
+    <div class="map-container">
+        <!-- <h5 class="mdc-typography--headline5">Location</h5> -->
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.27405770525!2d-118.69192047471653!3d34.02016130653294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2s!4v1623272136349!5m2!1sen!2s" 
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+
+<style>
+.contact-hero {
+    background-color: var(--mdc-theme-background);
+    padding: 64px 0;
+}
+
+.contact-content {
+    padding: 64px 0;
+}
+
+.form-field {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.form-error-message {
+    color: var(--mdc-theme-error);
+    margin-bottom: 16px;
+}
+
+.contact-info {
+    margin-top: 32px;
+}
+
+.contact-item {
+    display: flex;
+    margin-bottom: 24px;
+}
+
+.contact-icon {
+    font-size: 32px;
+    color: var(--mdc-theme-primary);
+    margin-right: 16px;
+}
+
+.contact-details {
+    flex: 1;
+}
+
+.contact-details h5 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.social-media-contact {
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.social-icons .fab {
+    color: var(--mdc-theme-primary);
+}
+
+.map-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 450px;
+    border: 0;
+}
+
+.map {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all text fields
+    const textFields = document.querySelectorAll('.mdc-text-field');
+    textFields.forEach(textField => {
+        mdc.textField.MDCTextField.attachTo(textField);
+    });
+});
+</script>
+{% endblock %}

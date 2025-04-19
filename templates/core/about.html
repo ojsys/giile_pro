@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ settings.site_title }} - About Us{% endblock %}
+
+{% block content %}
+<section class="hero about-hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="mdc-typography--headline2">{{ page.title }}</h1>
+                <div class="mdc-typography--body1">{{ page.intro|safe }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-content">
+    <div class="container">
+        <!-- Our Story Section -->
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <h2 class="mdc-typography--headline3">{{ page.our_story_title }}</h2>
+                    <div class="mdc-typography--body1">{{ page.our_story|safe }}</div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    {% if page.our_story_image %}
+                        <img src="{{ page.our_story_image.url }}" alt="{{ page.our_story_title }}" class="mdc-image-list__image">
+                    {% else %}
+                        <img src="{% static 'images/about-story.jpg' %}" alt="{{ page.our_story_title }}" class="mdc-image-list__image">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vision Section -->
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    {% if page.vision_image %}
+                        <img src="{{ page.vision_image.url }}" alt="{{ page.vision_title }}" class="mdc-image-list__image">
+                    {% else %}
+                        <img src="{% static 'images/about-vision.jpg' %}" alt="{{ page.vision_title }}" class="mdc-image-list__image">
+                    {% endif %}
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <h2 class="mdc-typography--headline3">{{ page.vision_title }}</h2>
+                    <div class="mdc-typography--body1">{{ page.vision|safe }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mission Section -->
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--order-2-desktop">
+                    <h2 class="mdc-typography--headline3">{{ page.mission_title }}</h2>
+                    <div class="mdc-typography--body1">{{ page.mission|safe }}</div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--order-1-desktop">
+                    {% if page.mission_image %}
+                        <img src="{{ page.mission_image.url }}" alt="{{ page.mission_title }}" class="mdc-image-list__image">
+                    {% else %}
+                        <img src="{% static 'images/about-mission.jpg' %}" alt="{{ page.mission_title }}" class="mdc-image-list__image">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Values Section -->
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <h2 class="mdc-typography--headline3">{{ page.values_title }}</h2>
+                    <ul class="mdc-typography--body1">
+                        {% for value in page.values.all %}
+                            <li><strong>{{ value.title }}:</strong> {{ value.description|safe }}</li>
+                        {% empty %}
+                            <li><strong>Integrity:</strong> We operate with honesty, transparency, and ethical standards in all our dealings.</li>
+                            <li><strong>Excellence:</strong> We strive for the highest quality in everything we do.</li>
+                            <li><strong>Innovation:</strong> We embrace creativity and forward-thinking approaches.</li>
+                            <li><strong>Collaboration:</strong> We believe in the power of teamwork and partnerships.</li>
+                            <li><strong>Diversity:</strong> We celebrate and promote diverse voices and perspectives.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <!-- Values image placeholder -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Team Section -->
+        <div class="team-section">
+            <h2 class="mdc-typography--headline3 section-title">{{ page.team_title }}</h2>
+            <p class="mdc-typography--body1 section-subtitle">{{ page.team_subtitle }}</p>
+            
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__inner">
+                    {% for member in page.team_members.all %}
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                            <div class="mdc-card team-card">
+                                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% if member.photo %}{{ member.photo.url }}{% else %}{% static 'images/team-placeholder.jpg' %}{% endif %}');">
+                                    <div class="mdc-card__media-content"></div>
+                                </div>
+                                <div class="mdc-card__content">
+                                    <h5 class="mdc-typography--headline5">{{ member.name }}</h5>
+                                    <p class="mdc-typography--subtitle2">{{ member.position }}</p>
+                                    <div class="mdc-typography--body2">{{ member.bio|safe }}</div>
+                                </div>
+                                <div class="mdc-card__actions">
+                                    <div class="mdc-card__action-icons">
+                                        {% if member.linkedin_url %}
+                                            <a href="{{ member.linkedin_url }}" class="mdc-icon-button mdc-card__action mdc-card__action--icon" aria-label="LinkedIn" target="_blank">
+                                                <i class="fab fa-linkedin-in"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if member.twitter_url %}
+                                            <a href="{{ member.twitter_url }}" class="mdc-icon-button mdc-card__action mdc-card__action--icon" aria-label="Twitter" target="_blank">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if member.instagram_url %}
+                                            <a href="{{ member.instagram_url }}" class="mdc-icon-button mdc-card__action mdc-card__action--icon" aria-label="Instagram" target="_blank">
+                                                <i class="fab fa-instagram"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <!-- Default team members if none are added -->
+                        <!-- Team Member 1 -->
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                            <div class="mdc-card team-card">
+                                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/team-placeholder.jpg' %}');">
+                                    <div class="mdc-card__media-content"></div>
+                                </div>
+                                <div class="mdc-card__content">
+                                    <h5 class="mdc-typography--headline5">John Doe</h5>
+                                    <p class="mdc-typography--subtitle2">CEO & Founder</p>
+                                    <div class="mdc-typography--body2">With over 20 years of experience in the entertainment industry, John has built Giile Pro from the ground up.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Member 2 -->
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                            <div class="mdc-card team-card">
+                                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/team-placeholder.jpg' %}');">
+                                    <div class="mdc-card__media-content"></div>
+                                </div>
+                                <div class="mdc-card__content">
+                                    <h5 class="mdc-typography--headline5">Jane Smith</h5>
+                                    <p class="mdc-typography--subtitle2">Head of Talent Management</p>
+                                    <div class="mdc-typography--body2">Jane brings her expertise in talent development and career strategy.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Member 3 -->
+                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                            <div class="mdc-card team-card">
+                                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/team-placeholder.jpg' %}');">
+                                    <div class="mdc-card__media-content"></div>
+                                </div>
+                                <div class="mdc-card__content">
+                                    <h5 class="mdc-typography--headline5">Michael Johnson</h5>
+                                    <p class="mdc-typography--subtitle2">Creative Director</p>
+                                    <div class="mdc-typography--body2">Michael oversees all creative aspects of our productions.</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

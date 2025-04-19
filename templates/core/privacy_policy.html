@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ settings.core.SiteSettings.site_title }} - Privacy Policy{% endblock %}
+
+{% block content %}
+<section class="privacy-hero">
+    <div class="container">
+        <h1 class="mdc-typography--headline2">Privacy Policy</h1>
+        <p class="mdc-typography--body1">Last updated: {% now "F j, Y" %}</p>
+    </div>
+</section>
+
+<section class="privacy-content">
+    <div class="container">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--align-middle mdc-layout-grid__cell--order-1 mdc-layout-grid__cell--offset-1-desktop">
+                    <div class="mdc-card policy-card">
+                        <div class="mdc-card__content">
+                            <div class="policy-section">
+                                <h2 class="mdc-typography--headline3">Introduction</h2>
+                                <p class="mdc-typography--body1">{{ settings.core.SiteSettings.site_title }} ("we," "our," or "us") respects your privacy and is committed to protecting your personal data. This privacy policy will inform you about how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
+                                <p class="mdc-typography--body1">This privacy policy applies to all information collected through our website, as well as any related services, sales, marketing, or events.</p>
+                            </div>
+                            
+                            <div class="policy-section">
+                                <h2 class="mdc-typography--headline3">Information We Collect</h2>
+                                <p class="mdc-typography--body1">We collect several different types of information for various purposes to provide and improve our service to you:</p>
+                                
+                                <h4 class="mdc-typography--headline4">Personal Data</h4>
+                                <p class="mdc-typography--body1">While using our service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you. Personally identifiable information may include, but is not limited to:</p>
+                                <ul class="mdc-list">
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">Email address</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">First name and last name</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">Phone number</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">Address, State, Province, ZIP/Postal code, City</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">Cookies and Usage Data</span>
+                                    </li>
+                                </ul>
+                                
+                                <h4 class="mdc-typography--headline4">Usage Data</h4>
+                                <p class="mdc-typography--body1">We may also collect information on how the service is accessed and used. This Usage Data may include information such as your computer's Internet Protocol address (e.g., IP address), browser type, browser version, the pages of our service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers, and other diagnostic data.</p>
+                            </div>
+                            
+                            <div class="policy-section">
+                                <h2 class="mdc-typography--headline3">How We Use Your Information</h2>
+                                <p class="mdc-typography--body1">We use the collected data for various purposes:</p>
+                                <ul class="mdc-list">
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To provide and maintain our service</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To notify you about changes to our service</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To allow you to participate in interactive features of our service when you choose to do so</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To provide customer support</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To gather analysis or valuable information so that we can improve our service</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To monitor the usage of our service</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To detect, prevent and address technical issues</span>
+                                    </li>
+                                    <li class="mdc-list-item">
+                                        <span class="mdc-list-item__ripple"></span>
+                                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">check_circle</i>
+                                        <span class="mdc-list-item__text">To provide you with news, special offers and general information about other goods, services and events</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Additional sections would continue here -->
+                            
+                            <div class="policy-section">
+                                <h2 class="mdc-typography--headline3">Contact Us</h2>
+                                <p class="mdc-typography--body1">If you have any questions about this Privacy Policy, please contact us:</p>
+                                <div class="contact-card">
+                                    <div class="contact-item">
+                                        <i class="material-icons contact-icon">email</i>
+                                        <div class="contact-details">
+                                            <strong>Email:</strong> privacy@ggppro.com
+                                        </div>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="material-icons contact-icon">phone</i>
+                                        <div class="contact-details">
+                                            <strong>Phone:</strong> +1 (123) 456-7890
+                                        </div>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="material-icons contact-icon">location_on</i>
+                                        <div class="contact-details">
+                                            <strong>Mail:</strong> 123 Entertainment Blvd, Los Angeles, CA 90001, United States
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.privacy-hero {
+    background-color: var(--mdc-theme-primary);
+    color: white;
+    padding: 64px 0;
+    text-align: center;
+}
+
+.privacy-content {
+    padding: 64px 0;
+}
+
+.policy-card {
+    padding: 32px;
+    margin-bottom: 32px;
+}
+
+.policy-section {
+    margin-bottom: 48px;
+}
+
+.policy-section h2 {
+    margin-bottom: 16px;
+}
+
+.policy-section h4 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+.contact-card {
+    background-color: var(--mdc-theme-surface);
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.contact-icon {
+    color: var(--mdc-theme-primary);
+    margin-right: 16px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}GGP Pro - Message Sent{% endblock %}
+
+{% block content %}
+<section class="success-message py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 text-center">
+                <div class="card p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success fa-5x"></i>
+                    </div>
+                    <h1 class="display-4">Thank You!</h1>
+                    <p class="lead">Your message has been sent successfully.</p>
+                    <p>We appreciate you contacting GGP Pro. One of our team members will get back to you shortly.</p>
+                    <div class="mt-4">
+                        <a href="{% url 'core:home' %}" class="btn btn-primary me-2">Return to Home</a>
+                        <a href="{% url 'core:contact' %}" class="btn btn-outline-primary">Send Another Message</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | Giile Pro{% endblock %}
+
+{% block content %}
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <h1 class="mdc-typography--headline4">My Profile</h1>
+        </div>
+        
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+            <div class="mdc-card" style="height: 100%;">
+                <div style="padding: 16px; text-align: center;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; background-color: #e0e0e0; margin: 0 auto 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <i class="material-icons" style="font-size: 64px; color: #9e9e9e;">account_circle</i>
+                        {% endif %}
+                    </div>
+                    <h2 class="mdc-typography--headline6">{{ user.get_full_name }}</h2>
+                    <p class="mdc-typography--body2" style="color: rgba(0, 0, 0, 0.6);">{{ user.get_user_type_display }}</p>
+                    
+                    <div class="mdc-chip-set" role="grid">
+                        {% if user.is_verified %}
+                            <div class="mdc-chip" role="row">
+                                <div class="mdc-chip__ripple"></div>
+                                <i class="material-icons mdc-chip__icon mdc-chip__icon--leading" style="color: #4caf50;">check_circle</i>
+                                <span class="mdc-chip__text">Verified</span>
+                            </div>
+                        {% else %}
+                            <div class="mdc-chip" role="row">
+                                <div class="mdc-chip__ripple"></div>
+                                <i class="material-icons mdc-chip__icon mdc-chip__icon--leading" style="color: #ff9800;">warning</i>
+                                <span class="mdc-chip__text">Not Verified</span>
+                            </div>
+                        {% endif %}
+                        
+                        {% if user.is_premium %}
+                            <div class="mdc-chip" role="row">
+                                <div class="mdc-chip__ripple"></div>
+                                <i class="material-icons mdc-chip__icon mdc-chip__icon--leading" style="color: #ffc107;">star</i>
+                                <span class="mdc-chip__text">Premium</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mdc-card__actions">
+                    <div class="mdc-card__action-buttons" style="width: 100%;">
+                        <a href="{% url 'accounts:edit_profile' %}" class="mdc-button mdc-button--outlined mdc-card__action mdc-card__action--button" style="width: 100%;">
+                            <span class="mdc-button__ripple"></span>
+                            <i class="material-icons mdc-button__icon">edit</i>
+                            <span class="mdc-button__label">Edit Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+            <div class="mdc-card">
+                <div style="padding: 16px;">
+                    <h2 class="mdc-typography--headline6">Personal Information</h2>
+                    
+                    <div class="mdc-list">
+                        <div class="mdc-list-item">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic">person</i>
+                            <span class="mdc-list-item__text">
+                                <span class="mdc-list-item__primary-text">Username</span>
+                                <span class="mdc-list-item__secondary-text">{{ user.username }}</span>
+                            </span>
+                        </div>
+                        
+                        <div class="mdc-list-item">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic">email</i>
+                            <span class="mdc-list-item__text">
+                                <span class="mdc-list-item__primary-text">Email</span>
+                                <span class="mdc-list-item__secondary-text">{{ user.email }}</span>
+                            </span>
+                        </div>
+                        
+                        <div class="mdc-list-item">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic">phone</i>
+                            <span class="mdc-list-item__text">
+                                <span class="mdc-list-item__primary-text">Phone Number</span>
+                                <span class="mdc-list-item__secondary-text">{{ user.phone_number|default:"Not provided" }}</span>
+                            </span>
+                        </div>
+                        
+                        <div class="mdc-list-item">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic">cake</i>
+                            <span class="mdc-list-item__text">
+                                <span class="mdc-list-item__primary-text">Date of Birth</span>
+                                <span class="mdc-list-item__secondary-text">{{ user.date_of_birth|date:"F j, Y"|default:"Not provided" }}</span>
+                            </span>
+                        </div>
+                        
+                        <div class="mdc-list-item">
+                            <span class="mdc-list-item__ripple"></span>
+                            <i class="material-icons mdc-list-item__graphic">calendar_today</i>
+                            <span class="mdc-list-item__text">
+                                <span class="mdc-list-item__primary-text">Member Since</span>
+                                <span class="mdc-list-item__secondary-text">{{ user.date_joined|date:"F j, Y" }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mdc-card__actions">
+                    <div class="mdc-card__action-buttons">
+                        <a href="{% url 'accounts:change_password' %}" class="mdc-button mdc-card__action mdc-card__action--button">
+                            <span class="mdc-button__ripple"></span>
+                            <i class="material-icons mdc-button__icon">lock</i>
+                            <span class="mdc-button__label">Change Password</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize chips
+    document.querySelectorAll('.mdc-chip-set').forEach(function(chipSet) {
+        mdc.chips.MDCChipSet.attachTo(chipSet);
+    });
+</script>
+{% endblock %}

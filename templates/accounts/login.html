@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | Giile Pro{% endblock %}
+
+{% block content %}
+<div class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--align-middle"></div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-4-phone">
+            <div class="mdc-card">
+                <div class="mdc-card__primary-action" tabindex="0">
+                    <div style="padding: 16px;">
+                        <h2 class="mdc-typography--headline6" style="margin-top: 0;">Login to Your Account</h2>
+                    </div>
+                </div>
+                <div class="mdc-card__content" style="padding: 0 16px 16px 16px;">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon" style="width: 100%; margin-bottom: 16px;">
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">person</i>
+                            <input class="mdc-text-field__input" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.username.id_for_label }}" class="mdc-floating-label">{{ form.username.label }}</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                {{ form.username.errors }}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon" style="width: 100%; margin-bottom: 16px;">
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">lock</i>
+                            <input type="password" class="mdc-text-field__input" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="{{ form.password.id_for_label }}" class="mdc-floating-label">{{ form.password.label }}</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="mdc-typography--caption" style="color: #b00020; margin-bottom: 16px;">
+                                {{ form.password.errors }}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="mdc-form-field" style="margin-bottom: 24px;">
+                            <div class="mdc-checkbox">
+                                <input type="checkbox" class="mdc-checkbox__native-control" id="remember_me" name="remember_me"/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                            <label for="remember_me">Remember me</label>
+                        </div>
+                        
+                        <button type="submit" class="mdc-button mdc-button--raised" style="width: 100%;">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Login</span>
+                        </button>
+                    </form>
+                </div>
+                <div class="mdc-card__actions" style="padding: 16px; display: flex; justify-content: center;">
+                    <p class="mdc-typography--body2">Don't have an account? <a href="{% url 'accounts:signup' %}" class="mdc-typography--button" style="color: #6200ee; text-decoration: none;">Sign up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize text fields
+    document.querySelectorAll('.mdc-text-field').forEach(function(textField) {
+        mdc.textField.MDCTextField.attachTo(textField);
+    });
+    
+    // Initialize checkbox
+    const checkbox = mdc.checkbox.MDCCheckbox.attachTo(document.querySelector('.mdc-checkbox'));
+    const formField = mdc.formField.MDCFormField.attachTo(document.querySelector('.mdc-form-field'));
+    formField.input = checkbox;
+</script>
+{% endblock %}

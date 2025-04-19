@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ settings.site_title }}{% endblock %}</title>
+    <meta name="description" content="{{ settings.site_description }}">
+    <!-- Material Design Web Components -->
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="mdc-typography">
+    <header>
+        <aside class="mdc-drawer mdc-drawer--modal">
+            <div class="mdc-drawer__content">
+                <nav class="mdc-list">
+                    <a class="mdc-list-item {% if request.path == '/' %}mdc-list-item--activated{% endif %}" href="{% url 'core:home' %}">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>
+                        <span class="mdc-list-item__text">Home</span>
+                    </a>
+                    <a class="mdc-list-item {% if 'talent' in request.path %}mdc-list-item--activated{% endif %}" href="/talent/">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">person</i>
+                        <span class="mdc-list-item__text">Talent</span>
+                    </a>
+                    <a class="mdc-list-item {% if 'music' in request.path %}mdc-list-item--activated{% endif %}" href="/music/">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">music_note</i>
+                        <span class="mdc-list-item__text">Music</span>
+                    </a>
+                    <a class="mdc-list-item {% if 'movies' in request.path %}mdc-list-item--activated{% endif %}" href="/movies/">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">movie</i>
+                        <span class="mdc-list-item__text">Movies</span>
+                    </a>
+                    <a class="mdc-list-item {% if 'events' in request.path %}mdc-list-item--activated{% endif %}" href="/events/">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">event</i>
+                        <span class="mdc-list-item__text">Events</span>
+                    </a>
+                    <a class="mdc-list-item {% if 'blog' in request.path %}mdc-list-item--activated{% endif %}" href="/blog/">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">article</i>
+                        <span class="mdc-list-item__text">Blog</span>
+                    </a>
+                    <a class="mdc-list-item {% if request.path == '/about/' %}mdc-list-item--activated{% endif %}" href="{% url 'core:about' %}">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>
+                        <span class="mdc-list-item__text">About</span>
+                    </a>
+                    <a class="mdc-list-item {% if request.path == '/contact/' %}mdc-list-item--activated{% endif %}" href="{% url 'core:contact' %}">
+                        <span class="mdc-list-item__ripple"></span>
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">contact_mail</i>
+                        <span class="mdc-list-item__text">Contact</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+        
+        <div class="mdc-drawer-scrim"></div>
+        
+        <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <a href="{% url 'core:home' %}" class="mdc-top-app-bar__title site-title-container">
+                        <img src="{% static 'images/logo.png' %}" alt="{{ settings.site_title }} Logo" class="top-app-bar-logo">
+                        <span class="site-title">{{ settings.site_title }}</span>
+                    </a>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                    <nav class="desktop-nav">
+                        <a href="{% url 'core:home' %}" class="mdc-button {% if request.path == '/' %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Home</span>
+                        </a>
+                        <a href="/talent/" class="mdc-button {% if 'talent' in request.path %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Talent</span>
+                        </a>
+                        <a href="/music/" class="mdc-button {% if 'music' in request.path %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Music</span>
+                        </a>
+                        <a href="/movies/" class="mdc-button {% if 'movies' in request.path %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Movies</span>
+                        </a>
+                        <a href="/events/" class="mdc-button {% if 'events' in request.path %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Events</span>
+                        </a>
+                        <a href="/blog/" class="mdc-button {% if 'blog' in request.path %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Blog</span>
+                        </a>
+                        <a href="{% url 'core:about' %}" class="mdc-button {% if request.path == '/about/' %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">About</span>
+                        </a>
+                        <a href="{% url 'core:contact' %}" class="mdc-button {% if request.path == '/contact/' %}mdc-button--unelevated{% endif %}">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Contact</span>
+                        </a>
+                    </nav>
+                </section>
+            </div>
+        </header>
+    </header>
+
+    <main class="main-content mdc-top-app-bar--fixed-adjust">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="mdc-layout-grid footer">
+        <div class="container">
+            <div class="mdc-layout-grid__inner footer-content">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone footer-section">
+                    <h5 class="mdc-typography--headline5">{{ settings.site_title }}</h5>
+                    
+                    {% if settings.footer_text %}
+                        <div class="footer-text mdc-typography--body2">
+                            {{ settings.footer_text|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone footer-section">
+                    <h5 class="mdc-typography--headline5">Quick Links</h5>
+                    <nav class="footer-nav">
+                        <ul class="mdc-list mdc-list--non-interactive">
+                            <li class="mdc-list-item">
+                                <span class="mdc-list-item__ripple"></span>
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">chevron_right</i>
+                                <a href="{% url 'core:home' %}" class="mdc-list-item__text">Home</a>
+                            </li>
+                            <li class="mdc-list-item">
+                                <span class="mdc-list-item__ripple"></span>
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">chevron_right</i>
+                                <a href="{% url 'core:about' %}" class="mdc-list-item__text">About</a>
+                            </li>
+                            <li class="mdc-list-item">
+                                <span class="mdc-list-item__ripple"></span>
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">chevron_right</i>
+                                <a href="{% url 'core:contact' %}" class="mdc-list-item__text">Contact</a>
+                            </li>
+                            <li class="mdc-list-item">
+                                <span class="mdc-list-item__ripple"></span>
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">chevron_right</i>
+                                <a href="{% url 'core:privacy_policy' %}" class="mdc-list-item__text">Privacy Policy</a>
+                            </li>
+                            <li class="mdc-list-item">
+                                <span class="mdc-list-item__ripple"></span>
+                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">chevron_right</i>
+                                <a href="{% url 'core:terms_of_service' %}" class="mdc-list-item__text">Terms of Service</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone footer-section">
+                    <h5 class="mdc-typography--headline5">Connect With Us</h5>
+                    <div class="contact-info">
+                        {% if settings.address %}
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon">location_on</i>
+                            <span class="mdc-typography--body2 contact-text">{{ settings.address|safe }}</span>
+                        </div>
+                        {% endif %}
+                        {% if settings.contact_email %}
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon">email</i>
+                            <span class="mdc-typography--body2 contact-text">{{ settings.contact_email }}</span>
+                        </div>
+                        {% endif %}
+                        {% if settings.contact_phone %}
+                        <div class="contact-item">
+                            <i class="material-icons contact-icon">phone</i>
+                            <span class="mdc-typography--body2 contact-text">{{ settings.contact_phone }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="social-icons">
+                        {% if settings.facebook_url %}
+                        <a href="{{ settings.facebook_url }}" class="mdc-icon-button social-icon" target="_blank" aria-label="Facebook">
+                            <div class="mdc-icon-button__ripple"></div>
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        {% endif %}
+                        {% if settings.twitter_url %}
+                        <a href="{{ settings.twitter_url }}" class="mdc-icon-button social-icon" target="_blank" aria-label="Twitter">
+                            <div class="mdc-icon-button__ripple"></div>
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        {% endif %}
+                        {% if settings.instagram_url %}
+                        <a href="{{ settings.instagram_url }}" class="mdc-icon-button social-icon" target="_blank" aria-label="Instagram">
+                            <div class="mdc-icon-button__ripple"></div>
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        {% endif %}
+                        {% if settings.youtube_url %}
+                        <a href="{{ settings.youtube_url }}" class="mdc-icon-button social-icon" target="_blank" aria-label="YouTube">
+                            <div class="mdc-icon-button__ripple"></div>
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        {% endif %}
+                        {% if settings.linkedin_url %}
+                        <a href="{{ settings.linkedin_url }}" class="mdc-icon-button social-icon" target="_blank" aria-label="LinkedIn">
+                            <div class="mdc-icon-button__ripple"></div>
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-copyright" style="padding-bottom:25px;">
+                <p class="mdc-typography--body2">{% if settings.copyright_text %}{{ settings.copyright_text }}{% else %}&copy; {% now "Y" %} {{ settings.site_title }}. All rights reserved.{% endif %}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script>
+        // Initialize Material Components
+        window.mdc.autoInit();
+        
+        // Initialize drawer
+        const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+        const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'));
+        
+        topAppBar.listen('MDCTopAppBar:nav', () => {
+            drawer.open = !drawer.open;
+        });
+    </script>
+    {% load static %}
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

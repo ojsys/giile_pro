@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Giile Pro - Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="mdc-typography--headline2">Welcome to Giile Pro</h1>
+                <p class="mdc-typography--body1">Your premier entertainment management platform</p>
+                <a href="/accounts/signup/" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__ripple"></span>
+                    <span class="mdc-button__label">Get Started</span>
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="{% static 'images/hero-image.jpg' %}" alt="Giile Pro" class="mdc-image-list__image">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services">
+    <div class="container">
+        <h2 class="mdc-typography--headline3 section-title">Our Services</h2>
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card service-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/talent.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Talent Management</h5>
+                            <p class="mdc-typography--body2">We represent and manage artists, actors, and creative professionals.</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/talent/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Explore Talent</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card service-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/music.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Music Production</h5>
+                            <p class="mdc-typography--body2">Our record label produces and distributes quality music across genres.</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/music/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Explore Music</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card service-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/movies.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Movie Production</h5>
+                            <p class="mdc-typography--body2">We create compelling films and video content for various platforms.</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/movies/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Explore Movies</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="events">
+    <div class="container">
+        <h2 class="mdc-typography--headline3 section-title">Upcoming Events</h2>
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card event-card" style="padding: 20px;">
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Summer Music Festival</h5>
+                            <div class="event-details">
+                                <div class="event-detail">
+                                    <i class="material-icons">event</i>
+                                    <span class="mdc-typography--body2">July 15-17, 2023</span>
+                                </div>
+                                <div class="event-detail">
+                                    <i class="material-icons">location_on</i>
+                                    <span class="mdc-typography--body2">Central Park, New York</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/events/summer-music-festival/" class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Get Tickets</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card event-card" style="padding: 20px;">
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Movie Premiere: "The Last Chapter"</h5>
+                            <div class="event-details">
+                                <div class="event-detail">
+                                    <i class="material-icons">event</i>
+                                    <span class="mdc-typography--body2">August 5, 2023</span>
+                                </div>
+                                <div class="event-detail">
+                                    <i class="material-icons">location_on</i>
+                                    <span class="mdc-typography--body2">Regal Cinema, Los Angeles</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/events/the-last-chapter-premiere/" class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Get Tickets</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="view-all-link">
+            <a href="/events/" class="mdc-button">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label">View All Events</span>
+                <i class="material-icons mdc-button__icon" aria-hidden="true">arrow_forward</i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="blog">
+    <div class="container">
+        <h2 class="mdc-typography--headline3 section-title">Latest News</h2>
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card blog-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/blog1.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">New Artist Signing</h5>
+                            <p class="mdc-typography--body2">We're excited to announce the signing of rising star Jane Doe to our talent roster.</p>
+                            <p class="mdc-typography--caption">June 1, 2023</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/blog/new-artist-signing/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Read More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card blog-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/blog2.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Album Release</h5>
+                            <p class="mdc-typography--body2">John Smith's new album "Horizons" is now available on all streaming platforms.</p>
+                            <p class="mdc-typography--caption">May 15, 2023</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/blog/album-release-horizons/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Read More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="mdc-card blog-card">
+                        <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{% static 'images/blog3.jpg' %}');">
+                            <div class="mdc-card__media-content"></div>
+                        </div>
+                        <div class="mdc-card__content">
+                            <h5 class="mdc-typography--headline5">Film Festival Awards</h5>
+                            <p class="mdc-typography--body2">Our production "Silent Echo" won Best Drama at the International Film Festival.</p>
+                            <p class="mdc-typography--caption">April 28, 2023</p>
+                        </div>
+                        <div class="mdc-card__actions">
+                            <div class="mdc-card__action-buttons">
+                                <a href="/blog/film-festival-awards/" class="mdc-button mdc-card__action mdc-card__action--button">
+                                    <span class="mdc-button__ripple"></span>
+                                    <span class="mdc-button__label">Read More</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="view-all-link">
+            <a href="/blog/" class="mdc-button">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label">View All News</span>
+                <i class="material-icons mdc-button__icon" aria-hidden="true">arrow_forward</i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
