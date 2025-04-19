@@ -1,0 +1,72 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}{{ settings.site_title }} - Blog{% endblock %}
+
+{% block blog_content %}
+<div class="blog-posts">
+    <h1 class="mdc-typography--headline3 page-title">Blog</h1>
+    
+    <div class="post-grid">
+        {% for post in posts %}
+        <div class="post-card mdc-card">
+            {% if post.featured_image %}
+            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ post.featured_image.url }}');">
+                <div class="mdc-card__media-content"></div>
+            </div>
+            {% endif %}
+            <div class="mdc-card__content">
+                <div class="post-meta">
+                    <span class="post-date mdc-typography--caption">{{ post.formatted_date }}</span>
+                    {% if post.categories.all %}
+                    <span class="post-categories">
+                        {% for category in post.categories.all %}
+                        <a href="{{ category.get_absolute_url }}" class="category-link">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+                <h2 class="mdc-typography--headline5 post-title">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h2>
+                <div class="post-excerpt mdc-typography--body1">
+                    {{ post.excerpt }}
+                </div>
+            </div>
+            <div class="mdc-card__actions">
+                <a href="{{ post.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__label">Read More</span>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-posts">
+            <p class="mdc-typography--body1">No posts found.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="pagination">
+        <div class="pagination-inner">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="mdc-button">
+                <span class="mdc-button__label">Previous</span>
+            </a>
+            {% endif %}
+            
+            <span class="current-page mdc-typography--body1">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="mdc-button">
+                <span class="mdc-button__label">Next</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

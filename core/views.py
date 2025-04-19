@@ -1,13 +1,28 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
-from .models import AboutPage, SiteSettings
+from .models import AboutPage, SiteSettings, HomePage
+from blog.models import Post  # Import the Post model
 
 def home_view(request):
     """View for the home page."""
+    home = HomePage.get_homepage()
     settings = SiteSettings.get_settings()
-    return render(request, 'core/home.html', {
+    
+    # Get related content with safe empty defaults
+    services = home.services.all().order_by('order') if hasattr(home, 'services') else []
+    events = home.events.all().order_by('order') if hasattr(home, 'events') else []
+    
+    # Get the latest 3 published blog posts
+    latest_posts = Post.objects.filter(status='published').order_by('-published_at')[:3]
+    
+    context = {
+        'home': home,
         'settings': settings,
-    })
+        'services': services,
+        'events': events,
+        'latest_posts': latest_posts,  # Add latest posts to context
+    }
+    return render(request, 'core/home.html', context)
 
 def about_view(request):
     """View for the about page."""
@@ -43,3 +58,5 @@ def terms_of_service(request):
         'title': 'Terms of Service',
     }
     return render(request, 'core/terms_of_service.html', context)
+
+

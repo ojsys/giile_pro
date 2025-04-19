@@ -31,7 +31,7 @@ class AboutPage(models.Model):
     
     class Meta:
         verbose_name = _("About Page")
-        verbose_name_plural = _("About Pages")
+        verbose_name_plural = _("About Page")
     
     def __str__(self):
         return self.title
@@ -110,3 +110,85 @@ class SiteSettings(models.Model):
         """Get or create site settings."""
         settings, created = cls.objects.get_or_create(pk=1)
         return settings
+
+
+class HomePage(models.Model):
+    """Model for the Home page content."""
+    # Hero section
+    hero_title = models.CharField(_("Hero Title"), max_length=200, default="Welcome to Giile Pro")
+    hero_subtitle = models.CharField(_("Hero Subtitle"), max_length=200, default="Your premier entertainment management platform")
+    hero_button_text = models.CharField(_("Hero Button Text"), max_length=50, default="Get Started")
+    hero_button_url = models.CharField(_("Hero Button URL"), max_length=100, default="/accounts/signup/")
+    hero_image = models.ImageField(_("Hero Image"), upload_to='home/images/', blank=True, null=True)
+    
+    # Services section
+    services_title = models.CharField(_("Services Title"), max_length=100, default="Our Services")
+    
+    # Events section
+    events_title = models.CharField(_("Events Title"), max_length=100, default="Upcoming Events")
+    events_button_text = models.CharField(_("Events Button Text"), max_length=50, default="View All Events")
+    events_button_url = models.CharField(_("Events Button URL"), max_length=100, default="/events/")
+    
+    # Blog section
+    blog_title = models.CharField(_("Blog Title"), max_length=100, default="Latest News")
+    blog_button_text = models.CharField(_("Blog Button Text"), max_length=50, default="View All News")
+    blog_button_url = models.CharField(_("Blog Button URL"), max_length=100, default="/blog/")
+    
+    class Meta:
+        verbose_name = _("Home Page")
+        verbose_name_plural = _("Home Page")
+    
+    def __str__(self):
+        return self.hero_title
+    
+    def save(self, *args, **kwargs):
+        # Ensure there's only one instance of HomePage
+        self.__class__.objects.exclude(id=self.id).delete()
+        super().save(*args, **kwargs)
+    
+    @classmethod
+    def get_homepage(cls):
+        """Get or create home page settings."""
+        homepage, created = cls.objects.get_or_create(pk=1)
+        return homepage
+
+
+class Service(models.Model):
+    """Model for services displayed on the home page."""
+    home_page = models.ForeignKey(HomePage, on_delete=models.CASCADE, related_name='services')
+    title = models.CharField(_("Service Title"), max_length=100)
+    description = models.TextField(_("Service Description"))
+    image = models.ImageField(_("Service Image"), upload_to='services/images/', blank=True, null=True)
+    button_text = models.CharField(_("Button Text"), max_length=50, default="Explore")
+    button_url = models.CharField(_("Button URL"), max_length=100)
+    order = models.PositiveIntegerField(_("Order"), default=0)
+    
+    class Meta:
+        verbose_name = _("Service")
+        verbose_name_plural = _("Services")
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.title
+
+
+class Event(models.Model):
+    """Model for events displayed on the home page."""
+    home_page = models.ForeignKey(HomePage, on_delete=models.CASCADE, related_name='events')
+    title = models.CharField(_("Event Title"), max_length=100)
+    date = models.DateField(_("Event Date"), max_length=100)
+    location = models.CharField(_("Event Location"), max_length=100)
+    button_text = models.CharField(_("Button Text"), max_length=50, default="Get Tickets")
+    button_url = models.CharField(_("Button URL"), max_length=100)
+    order = models.PositiveIntegerField(_("Order"), default=0)
+    
+    class Meta:
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.title
+
+
+

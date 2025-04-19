@@ -1,0 +1,84 @@
+<div class="blog-sidebar">
+    <!-- Search Widget -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Search</h3>
+        </div>
+        <div class="widget-content">
+            <form action="{% url 'blog:post_list' %}" method="get" class="search-form">
+                <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon search-field">
+                    <input class="mdc-text-field__input" type="text" name="search" placeholder="Search...">
+                    <button type="submit" class="mdc-icon-button search-button">
+                        <i class="material-icons">search</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Recent Posts Widget -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Recent Posts</h3>
+        </div>
+        <div class="widget-content">
+            <ul class="recent-posts-list">
+                {% for post in recent_posts %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}">
+                        <div class="recent-post-item">
+                            {% if post.featured_image %}
+                            <div class="recent-post-image">
+                                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                            </div>
+                            {% endif %}
+                            <div class="recent-post-info">
+                                <h4 class="mdc-typography--subtitle1">{{ post.title }}</h4>
+                                <span class="mdc-typography--caption">{{ post.formatted_date }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {% empty %}
+                <li>No recent posts</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Categories Widget -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Categories</h3>
+        </div>
+        <div class="widget-content">
+            <ul class="category-list">
+                {% for category in categories %}
+                <li>
+                    <a href="{{ category.get_absolute_url }}">
+                        {{ category.name }} <span class="category-count">({{ category.post_count }})</span>
+                    </a>
+                </li>
+                {% empty %}
+                <li>No categories</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Tags Widget -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Tags</h3>
+        </div>
+        <div class="widget-content">
+            <div class="tag-cloud">
+                {% for tag in tags %}
+                <a href="{{ tag.get_absolute_url }}" class="tag-item">{{ tag.name }}</a>
+                {% empty %}
+                <span>No tags</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

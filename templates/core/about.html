@@ -18,7 +18,7 @@
 <section class="about-content">
     <div class="container">
         <!-- Our Story Section -->
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid section-margin">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
                     <h2 class="mdc-typography--headline3">{{ page.our_story_title }}</h2>
@@ -35,7 +35,7 @@
         </div>
         
         <!-- Vision Section -->
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid section-margin">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
                     {% if page.vision_image %}
@@ -52,7 +52,7 @@
         </div>
         
         <!-- Mission Section -->
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid section-margin">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone mdc-layout-grid__cell--order-2-desktop">
                     <h2 class="mdc-typography--headline3">{{ page.mission_title }}</h2>
@@ -69,32 +69,77 @@
         </div>
         
         <!-- Values Section -->
-        <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid section-margin">
             <div class="mdc-layout-grid__inner">
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                     <h2 class="mdc-typography--headline3">{{ page.values_title }}</h2>
-                    <ul class="mdc-typography--body1">
-                        {% for value in page.values.all %}
-                            <li><strong>{{ value.title }}:</strong> {{ value.description|safe }}</li>
-                        {% empty %}
-                            <li><strong>Integrity:</strong> We operate with honesty, transparency, and ethical standards in all our dealings.</li>
-                            <li><strong>Excellence:</strong> We strive for the highest quality in everything we do.</li>
-                            <li><strong>Innovation:</strong> We embrace creativity and forward-thinking approaches.</li>
-                            <li><strong>Collaboration:</strong> We believe in the power of teamwork and partnerships.</li>
-                            <li><strong>Diversity:</strong> We celebrate and promote diverse voices and perspectives.</li>
-                        {% endfor %}
-                    </ul>
                 </div>
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
-                    <!-- Values image placeholder -->
-                </div>
+            </div>
+            
+            <div class="mdc-layout-grid__inner values-grid">
+                {% for value in page.values.all %}
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">{{ value.title }}</h3>
+                                <div class="mdc-typography--body1">{{ value.description|safe }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <!-- Default values if none are added -->
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">Integrity</h3>
+                                <div class="mdc-typography--body1">We operate with honesty, transparency, and ethical standards in all our dealings.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">Excellence</h3>
+                                <div class="mdc-typography--body1">We strive for the highest quality in everything we do.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">Innovation</h3>
+                                <div class="mdc-typography--body1">We embrace creativity and forward-thinking approaches.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">Collaboration</h3>
+                                <div class="mdc-typography--body1">We believe in the power of teamwork and partnerships.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-phone">
+                        <div class="mdc-card value-card">
+                            <div class="mdc-card__content">
+                                <h3 class="mdc-typography--headline5">Diversity</h3>
+                                <div class="mdc-typography--body1">We celebrate and promote diverse voices and perspectives.</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         
         <!-- Team Section -->
-        <div class="team-section">
+        <div class="team-section section-margin">
             <h2 class="mdc-typography--headline3 section-title">{{ page.team_title }}</h2>
-            <p class="mdc-typography--body1 section-subtitle">{{ page.team_subtitle }}</p>
+            <p class="mdc-typography--body1 section-subtitle" style="margin-bottom: 50px;">{{ page.team_subtitle }}</p>
             
             <div class="mdc-layout-grid">
                 <div class="mdc-layout-grid__inner">
