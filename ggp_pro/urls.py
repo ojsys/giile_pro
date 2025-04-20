@@ -9,6 +9,8 @@ urlpatterns = [
     #path('accounts/', include('accounts.urls')),
     path('', include('core.urls')),
     path('blog/', include('blog.urls', namespace='blog')),
+    path('events/', include('events.urls', namespace='events')),
+    path('talent/', include('talent.urls', namespace='talent')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,71 @@
+{% extends "events/base.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} Events - {{ settings.site_title }}{% endblock %}
+
+{% block events_content %}
+<div class="events-list">
+    <h1 class="mdc-typography--headline3 page-title">{{ category.name }} Events</h1>
+    
+    <div class="events-grid">
+        {% for event in events %}
+        <div class="event-card mdc-card">
+            <div class="event-status-badge status-{{ event.status }}">{{ event.get_status_display }}</div>
+            {% if event.featured_image %}
+            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ event.featured_image.url }}');">
+                <div class="mdc-card__media-content"></div>
+            </div>
+            {% endif %}
+            <div class="mdc-card__content">
+                <div class="event-meta">
+                    <span class="event-date mdc-typography--caption">
+                        <i class="material-icons">event</i> {{ event.formatted_date }}
+                    </span>
+                    <span class="event-location mdc-typography--caption">
+                        <i class="material-icons">location_on</i> {{ event.location }}
+                    </span>
+                </div>
+                <h3 class="mdc-typography--headline6 event-title">
+                    <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+                </h3>
+                <div class="event-excerpt mdc-typography--body2">
+                    {{ event.short_description|truncatewords:20 }}
+                </div>
+            </div>
+            <div class="mdc-card__actions">
+                <a href="{{ event.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__label">View Details</span>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-events">
+            <p class="mdc-typography--body1">No events found in this category.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="pagination">
+        <div class="pagination-inner">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="mdc-button">
+                <span class="mdc-button__label">Previous</span>
+            </a>
+            {% endif %}
+            
+            <span class="current-page mdc-typography--body1">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="mdc-button">
+                <span class="mdc-button__label">Next</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

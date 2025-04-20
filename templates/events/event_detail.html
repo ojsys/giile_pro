@@ -1,0 +1,284 @@
+{% extends "events/base.html" %}
+{% load static %}
+
+{% block title %}{{ event.title }} - {{ settings.site_title }}{% endblock %}
+
+{% block events_content %}
+<article class="event-detail">
+    <div class="event-status-badge status-{{ event.status }}">{{ event.get_status_display }}</div>
+    
+    <header class="event-header">
+        <h1 class="mdc-typography--headline3 event-title">{{ event.title }}</h1>
+        <div class="event-meta">
+            <div class="event-meta-item">
+                <i class="material-icons">event</i>
+                <span class="mdc-typography--body1">{{ event.formatted_date }}</span>
+            </div>
+            <div class="event-meta-item">
+                <i class="material-icons">location_on</i>
+                <span class="mdc-typography--body1">{{ event.location }}</span>
+            </div>
+            {% if event.venue %}
+            <div class="event-meta-item">
+                <i class="material-icons">business</i>
+                <span class="mdc-typography--body1">{{ event.venue }}</span>
+            </div>
+            {% endif %}
+            {% if event.categories.all %}
+            <div class="event-meta-item">
+                <i class="material-icons">category</i>
+                <span class="mdc-typography--body1">
+                    {% for category in event.categories.all %}
+                    <a href="{% url 'events:category' category.slug %}" class="category-link">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+    
+    {% if event.featured_image %}
+    <div class="event-featured-image">
+        <img src="{{ event.featured_image.url }}" alt="{{ event.title }}">
+    </div>
+    {% endif %}
+    
+    <div class="event-content mdc-typography--body1">
+        {{ event.content|safe }}
+    </div>
+    
+    {% if event.speakers.all %}
+    <div class="event-speakers">
+        <h2 class="mdc-typography--headline5 section-title">Speakers</h2>
+        <div class="speakers-grid">
+            {% for speaker in event.speakers.all %}
+            <div class="speaker-card mdc-card">
+                {% if speaker.photo %}
+                <div class="speaker-photo">
+                    <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}">
+                </div>
+                {% endif %}
+                <div class="speaker-info">
+                    <h3 class="mdc-typography--headline6">{{ speaker.name }}</h3>
+                    {% if speaker.title %}
+                    <p class="mdc-typography--subtitle2">{{ speaker.title }}</p>
+                    {% endif %}
+                    {% if speaker.bio %}
+                    <div class="speaker-bio mdc-typography--body2">
+                        {{ speaker.bio }}
+                    </div>
+                    {% endif %}
+                    {% if speaker.website %}
+                    <a href="{{ speaker.website }}" target="_blank" class="mdc-button">
+                        <span class="mdc-button__label">Website</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if event.address or event.google_map_link %}
+    <div class="event-location-details">
+        <h2 class="mdc-typography--headline5 section-title">Location Details</h2>
+        <div class="location-grid">
+            {% if event.address %}
+            <div class="address-card mdc-card">
+                <div class="mdc-card__content">
+                    <h3 class="mdc-typography--headline6">Address</h3>
+                    <p class="mdc-typography--body1">{{ event.address|linebreaks }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if event.google_map_link %}
+            <div class="map-card">
+                <div class="map-embed">
+                    <iframe src="{{ event.google_map_link }}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Registration Section -->
+    {% if event.status == 'upcoming' or event.status == 'ongoing' %}
+        {% if event.registration_url %}
+        <div class="event-registration">
+            <h2 class="mdc-typography--headline5 section-title">Registration</h2>
+            <div class="registration-card mdc-card">
+                <div class="mdc-card__content">
+                    <p class="mdc-typography--body1">Register for this event on the official registration page.</p>
+                    {% if event.registration_deadline %}
+                    <p class="mdc-typography--body2 registration-deadline">
+                        <i class="material-icons">schedule</i> Registration deadline: {{ event.registration_deadline|date:"F d, Y" }}
+                    </p>
+                    {% endif %}
+                    <a href="{{ event.registration_url }}" target="_blank" class="mdc-button mdc-button--raised">
+                        <span class="mdc-button__label">Register Now</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="event-registration">
+            <h2 class="mdc-typography--headline5 section-title">Registration</h2>
+            
+            {% if registration_closed %}
+            <div class="registration-card mdc-card">
+                <div class="mdc-card__content">
+                    <p class="mdc-typography--body1 registration-closed-message">
+                        <i class="material-icons">error</i> Registration for this event has closed.
+                    </p>
+                </div>
+            </div>
+            {% else %}
+            <div class="registration-card mdc-card">
+                <div class="mdc-card__content">
+                    <form method="post" class="registration-form">
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="message message-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="form-row">
+                            <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                <input class="mdc-text-field__input" id="{{ registration_form.name.id_for_label }}" name="{{ registration_form.name.html_name }}" required>
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ registration_form.name.id_for_label }}" class="mdc-floating-label">Name</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            {% if registration_form.name.errors %}
+                            <div class="form-error">{{ registration_form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                <input type="email" class="mdc-text-field__input" id="{{ registration_form.email.id_for_label }}" name="{{ registration_form.email.html_name }}" required>
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ registration_form.email.id_for_label }}" class="mdc-floating-label">Email</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            {% if registration_form.email.errors %}
+                            <div class="form-error">{{ registration_form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                <input class="mdc-text-field__input" id="{{ registration_form.phone.id_for_label }}" name="{{ registration_form.phone.html_name }}">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ registration_form.phone.id_for_label }}" class="mdc-floating-label">Phone (optional)</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            {% if registration_form.phone.errors %}
+                            <div class="form-error">{{ registration_form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                <input class="mdc-text-field__input" id="{{ registration_form.organization.id_for_label }}" name="{{ registration_form.organization.html_name }}">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ registration_form.organization.id_for_label }}" class="mdc-floating-label">Organization (optional)</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            {% if registration_form.organization.errors %}
+                            <div class="form-error">{{ registration_form.organization.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="mdc-text-field mdc-text-field--textarea mdc-text-field--outlined form-field">
+                                <textarea class="mdc-text-field__input" id="{{ registration_form.message.id_for_label }}" name="{{ registration_form.message.html_name }}" rows="4"></textarea>
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="{{ registration_form.message.id_for_label }}" class="mdc-floating-label">Message (optional)</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            {% if registration_form.message.errors %}
+                            <div class="form-error">{{ registration_form.message.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="mdc-button mdc-button--raised">
+                                <span class="mdc-button__label">Register</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endif %}
+    
+    <!-- Related Events Section -->
+    {% if related_events %}
+    <div class="related-events">
+        <h2 class="mdc-typography--headline5 section-title">Related Events</h2>
+        <div class="related-events-grid">
+            {% for related_event in related_events %}
+            <div class="event-card mdc-card">
+                <div class="event-status-badge status-{{ related_event.status }}">{{ related_event.get_status_display }}</div>
+                {% if related_event.featured_image %}
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ related_event.featured_image.url }}');">
+                    <div class="mdc-card__media-content"></div>
+                </div>
+                {% endif %}
+                <div class="mdc-card__content">
+                    <div class="event-meta">
+                        <span class="event-date mdc-typography--caption">
+                            <i class="material-icons">event</i> {{ related_event.formatted_date }}
+                        </span>
+                        <span class="event-location mdc-typography--caption">
+                            <i class="material-icons">location_on</i> {{ related_event.location }}
+                        </span>
+                    </div>
+                    <h3 class="mdc-typography--headline6 event-title">
+                        <a href="{{ related_event.get_absolute_url }}">{{ related_event.title }}</a>
+                    </h3>
+                </div>
+                <div class="mdc-card__actions">
+                    <a href="{{ related_event.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                        <span class="mdc-button__label">View Details</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</article>
+{% endblock %}

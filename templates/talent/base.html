@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Talents - {{ settings.site_title }}{% endblock %}
+
+{% block content %}
+<div class="talent-app">
+    <!-- Talent App Header -->
+    <div class="talent-app-header">
+        <div class="container">
+            <div class="talent-app-header-content">
+                <h1 class="mdc-typography--headline3 talent-app-title">Talents</h1>
+                <div class="talent-app-actions">
+                    <a href="{% url 'talent:talent_list' %}" class="mdc-button {% if request.resolver_match.url_name == 'talent_list' %}mdc-button--unelevated{% endif %}">
+                        <span class="mdc-button__label">Browse Talents</span>
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'talent:talent_dashboard' %}" class="mdc-button {% if request.resolver_match.url_name == 'talent_dashboard' %}mdc-button--unelevated{% endif %}">
+                        <span class="mdc-button__label">My Dashboard</span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'talent:talent_register' %}" class="mdc-button mdc-button--raised">
+                        <span class="mdc-button__label">Join as Talent</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Talent App Content -->
+    <div class="talent-app-content">
+        {% block talent_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

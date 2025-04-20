@@ -1,0 +1,55 @@
+{% extends "events/base.html" %}
+{% load static %}
+
+{% block title %}Registration Confirmed - {{ event.title }} - {{ settings.site_title }}{% endblock %}
+
+{% block events_content %}
+<div class="thank-you-container">
+    <div class="thank-you-card mdc-card">
+        <div class="thank-you-icon">
+            <i class="material-icons">check_circle</i>
+        </div>
+        
+        <h1 class="mdc-typography--headline4 thank-you-title">Thank You!</h1>
+        
+        <div class="thank-you-message mdc-typography--body1">
+            <p>Your registration for <strong>{{ event.title }}</strong> has been successfully submitted.</p>
+            <p>We've sent a confirmation email to your provided email address with all the event details.</p>
+            <p>If you have any questions, please don't hesitate to contact us.</p>
+        </div>
+        
+        <div class="event-summary">
+            <h2 class="mdc-typography--headline6">Event Details</h2>
+            
+            <div class="event-summary-details">
+                <div class="event-summary-item">
+                    <i class="material-icons">event</i>
+                    <span>{{ event.formatted_date }}</span>
+                </div>
+                
+                <div class="event-summary-item">
+                    <i class="material-icons">location_on</i>
+                    <span>{{ event.location }}</span>
+                </div>
+                
+                {% if event.venue %}
+                <div class="event-summary-item">
+                    <i class="material-icons">business</i>
+                    <span>{{ event.venue }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="thank-you-actions">
+            <a href="{% url 'events:event_detail' event.slug %}" class="mdc-button">
+                <span class="mdc-button__label">Back to Event</span>
+            </a>
+            
+            <a href="{% url 'events:event_list' %}" class="mdc-button">
+                <span class="mdc-button__label">Browse More Events</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

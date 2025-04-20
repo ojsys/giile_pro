@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="events-container">
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                {% block events_content %}{% endblock %}
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                {% include "events/sidebar.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

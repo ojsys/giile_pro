@@ -1,0 +1,57 @@
+<div class="events-sidebar">
+    <!-- Categories Widget -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Event Categories</h3>
+        </div>
+        <div class="widget-content">
+            <ul class="category-list">
+                <li>
+                    <a href="{% url 'events:event_list' %}" class="{% if not selected_category %}active{% endif %}">
+                        All Events
+                    </a>
+                </li>
+                {% for category in categories %}
+                <li>
+                    <a href="{% url 'events:category' category.slug %}" class="{% if selected_category == category.slug %}active{% endif %}">
+                        {{ category.name }} <span class="category-count">({{ category.event_count }})</span>
+                    </a>
+                </li>
+                {% empty %}
+                <li>No categories</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Event Status Filter -->
+    <div class="mdc-card sidebar-widget">
+        <div class="widget-title">
+            <h3 class="mdc-typography--headline6">Event Status</h3>
+        </div>
+        <div class="widget-content">
+            <ul class="status-list">
+                <li>
+                    <a href="{% url 'events:event_list' %}{% if selected_category %}?category={{ selected_category }}{% endif %}" class="{% if not selected_status %}active{% endif %}">
+                        Upcoming & Ongoing
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'events:event_list' %}?status=upcoming{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_status == 'upcoming' %}active{% endif %}">
+                        Upcoming
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'events:event_list' %}?status=ongoing{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_status == 'ongoing' %}active{% endif %}">
+                        Ongoing
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'events:event_list' %}?status=past{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_status == 'past' %}active{% endif %}">
+                        Past Events
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

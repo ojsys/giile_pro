@@ -1,0 +1,252 @@
+{% extends "talent/base.html" %}
+{% load static %}
+
+{% block title %}Talents - {{ settings.site_title }}{% endblock %}
+
+{% block talent_content %}
+<div class="talent-list-header">
+    <div class="container">
+        <h1 class="mdc-typography--headline3 page-title">Our Talents</h1>
+        <p class="mdc-typography--body1 page-description">Discover our exceptional talents ready to bring your projects to life.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <!-- Sidebar / Filters -->
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                <div class="talent-sidebar">
+                    <!-- Search Widget -->
+                    <div class="mdc-card sidebar-widget">
+                        <div class="widget-title">
+                            <h3 class="mdc-typography--headline6">Search Talents</h3>
+                        </div>
+                        <div class="widget-content">
+                            <form method="get" action="{% url 'talent:talent_list' %}" class="search-form">
+                                <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon search-field">
+                                    <input class="mdc-text-field__input" type="search" name="q" value="{{ search_query }}" placeholder="Search talents...">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label class="mdc-floating-label">Search</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                    <button type="submit" class="mdc-text-field__icon mdc-text-field__icon--trailing">
+                                        <i class="material-icons">search</i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Categories Widget -->
+                    <div class="mdc-card sidebar-widget" style="margin-top: 2rem;">
+                        <div class="widget-title">
+                            <h3 class="mdc-typography--headline6">Categories</h3>
+                        </div>
+                        <div class="widget-content">
+                            <ul class="category-list">
+                                <li>
+                                    <a href="{% url 'talent:talent_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="{% if not selected_category %}active{% endif %}">
+                                        All Categories
+                                    </a>
+                                </li>
+                                {% for category in categories %}
+                                <li>
+                                    <a href="{% url 'talent:category' category.slug %}{% if search_query %}?q={{ search_query }}{% endif %}" class="{% if selected_category == category.slug %}active{% endif %}">
+                                        {{ category.name }} <span class="category-count">({{ category.talent_count }})</span>
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li>No categories</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Widget -->
+                    <div class="mdc-card sidebar-widget" style="margin-top: 2rem;">
+                        <div class="widget-title">
+                            <h3 class="mdc-typography--headline6">Popular Skills</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="skills-cloud">
+                                {% for skill in skills %}
+                                <a href="{% url 'talent:skill' skill.slug %}" class="skill-tag {% if selected_skill == skill.slug %}active{% endif %}">
+                                    {{ skill.name }}
+                                </a>
+                                {% empty %}
+                                <p>No skills found</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                <!-- Sort Options -->
+                <div class="sort-options">
+                    <span class="mdc-typography--body2">Sort by:</span>
+                    <div class="sort-links">
+                        <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_skill %}skill={{ selected_skill }}&{% endif %}sort=name" class="sort-link {% if sort_by == 'name' %}active{% endif %}">Name</a>
+                        <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_skill %}skill={{ selected_skill }}&{% endif %}sort=experience" class="sort-link {% if sort_by == 'experience' %}active{% endif %}">Experience</a>
+                        <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_skill %}skill={{ selected_skill }}&{% endif %}sort=newest" class="sort-link {% if sort_by == 'newest' %}active{% endif %}">Newest</a>
+                    </div>
+                </div>
+                
+                {% if featured_talents and not search_query and not selected_category and not selected_skill %}
+                <!-- Featured Talents Section -->
+                <div class="featured-talents-section">
+                    <h2 class="mdc-typography--headline5 section-title">Featured Talents</h2>
+                    <div class="featured-talents-grid">
+                        {% for talent in featured_talents %}
+                        <div class="featured-talent-card mdc-card">
+                            <div class="talent-status-badge">Featured</div>
+                            {% if talent.profile_image %}
+                            <div class="talent-profile-image">
+                                <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                            </div>
+                            {% endif %}
+                            <div class="talent-info">
+                                <h3 class="mdc-typography--headline6 talent-name">
+                                    <a href="{{ talent.get_absolute_url }}">{{ talent.name }}</a>
+                                </h3>
+                                <div class="talent-categories">
+                                    {% for category in talent.categories.all %}
+                                    <span class="talent-category">{{ category.name }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="talent-experience">
+                                    <i class="material-icons">work</i> {{ talent.years_of_experience }} years experience
+                                </div>
+                                <div class="talent-bio mdc-typography--body2">
+                                    {{ talent.short_bio|truncatewords:20 }}
+                                </div>
+                                <div class="talent-skills">
+                                    {% for skill in talent.skills.all|slice:":5" %}
+                                    <span class="talent-skill-tag">{{ skill.name }}</span>
+                                    {% endfor %}
+                                    {% if talent.skills.count > 5 %}
+                                    <span class="talent-skill-tag more-skills">+{{ talent.skills.count|add:"-5" }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ talent.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                                    <span class="mdc-button__label">View Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- All Talents -->
+                <div class="talents-section">
+                    {% if search_query or selected_category or selected_skill %}
+                    <h2 class="mdc-typography--headline5 section-title">
+                        {% if search_query %}
+                        Search Results for "{{ search_query }}"
+                        {% elif selected_category %}
+                        {{ category.name }} Talents
+                        {% elif selected_skill %}
+                        Talents with {{ skill.name }} skill
+                        {% endif %}
+                    </h2>
+                    {% else %}
+                    <h2 class="mdc-typography--headline5 section-title">All Talents</h2>
+                    {% endif %}
+                    
+                    <div class="talents-grid">
+                        {% for talent in talents %}
+                        <div class="talent-card mdc-card">
+                            {% if talent.is_featured %}
+                            <div class="talent-status-badge">Featured</div>
+                            {% endif %}
+                            <div class="talent-card-header">
+                                {% if talent.profile_image %}
+                                <div class="talent-profile-image">
+                                    <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                                </div>
+                                {% else %}
+                                <div class="talent-profile-image talent-profile-placeholder">
+                                    <i class="material-icons">person</i>
+                                </div>
+                                {% endif %}
+                                <div class="talent-header-info">
+                                    <h3 class="mdc-typography--headline6 talent-name">
+                                        <a href="{{ talent.get_absolute_url }}">{{ talent.name }}</a>
+                                    </h3>
+                                    <div class="talent-categories">
+                                        {% for category in talent.categories.all|slice:":2" %}
+                                        <span class="talent-category">{{ category.name }}</span>
+                                        {% endfor %}
+                                        {% if talent.categories.count > 2 %}
+                                        <span class="talent-category more-categories">+{{ talent.categories.count|add:"-2" }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="talent-card-content">
+                                <div class="talent-experience">
+                                    <i class="material-icons">work</i> {{ talent.years_of_experience }} years experience
+                                </div>
+                                <div class="talent-bio mdc-typography--body2">
+                                    {{ talent.short_bio|truncatewords:15 }}
+                                </div>
+                                <div class="talent-skills">
+                                    {% for skill in talent.skills.all|slice:":3" %}
+                                    <span class="talent-skill-tag">{{ skill.name }}</span>
+                                    {% endfor %}
+                                    {% if talent.skills.count > 3 %}
+                                    <span class="talent-skill-tag more-skills">+{{ talent.skills.count|add:"-3" }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="talent-card-actions">
+                                <a href="{{ talent.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                                    <span class="mdc-button__label">View Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="no-talents">
+                            <p class="mdc-typography--body1">No talents found matching your criteria.</p>
+                            <a href="{% url 'talent:talent_list' %}" class="mdc-button">
+                                <span class="mdc-button__label">View All Talents</span>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Pagination -->
+                    {% if is_paginated %}
+                    <div class="pagination">
+                        <div class="pagination-inner">
+                            {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_skill %}&skill={{ selected_skill }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="mdc-button">
+                                <span class="mdc-button__label">Previous</span>
+                            </a>
+                            {% endif %}
+                            
+                            <span class="current-page mdc-typography--body1">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                            
+                            {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_skill %}&skill={{ selected_skill }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="mdc-button">
+                                <span class="mdc-button__label">Next</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

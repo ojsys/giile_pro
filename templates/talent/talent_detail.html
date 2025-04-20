@@ -1,0 +1,625 @@
+{% extends "talent/base.html" %}
+{% load static %}
+
+{% block title %}{{ talent.name }} - {{ settings.site_title }}{% endblock %}
+
+{% block talent_content %}
+<div class="talent-detail">
+    <!-- Talent Header -->
+    <div class="talent-detail-header">
+        {% if talent.cover_image %}
+        <div class="talent-cover-image" style="background-image: url('{{ talent.cover_image.url }}');">
+            <div class="cover-overlay"></div>
+        </div>
+        {% endif %}
+        
+        <div class="container">
+            <div class="talent-header-content">
+                <div class="talent-profile">
+                    {% if talent.profile_image %}
+                    <div class="talent-profile-image">
+                        <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                    </div>
+                    {% else %}
+                    <div class="talent-profile-image talent-profile-placeholder">
+                        <i class="material-icons">person</i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="talent-profile-info">
+                        <h1 class="mdc-typography--headline3 talent-name">{{ talent.name }}</h1>
+                        
+                        <div class="talent-categories">
+                            {% for category in talent.categories.all %}
+                            <span class="talent-category">{{ category.name }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="talent-meta">
+                            {% if talent.years_of_experience %}
+                            <div class="talent-meta-item">
+                                <i class="material-icons">work</i>
+                                <span>{{ talent.years_of_experience }} years experience</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if talent.hourly_rate %}
+                            <div class="talent-meta-item">
+                                <i class="material-icons">attach_money</i>
+                                <span>${{ talent.hourly_rate }}/hour</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if talent.location %}
+                            <div class="talent-meta-item">
+                                <i class="material-icons">location_on</i>
+                                <span>{{ talent.location }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="talent-actions">
+                            <a href="#booking" class="mdc-button mdc-button--raised">
+                                <span class="mdc-button__label">Book Now</span>
+                            </a>
+                            
+                            {% if talent.website %}
+                            <a href="{{ talent.website }}" target="_blank" class="mdc-button">
+                                <i class="material-icons mdc-button__icon">language</i>
+                                <span class="mdc-button__label">Website</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="talent-social">
+                    {% if talent.instagram %}
+                    <a href="{{ talent.instagram }}" target="_blank" class="social-icon instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if talent.twitter %}
+                    <a href="{{ talent.twitter }}" target="_blank" class="social-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if talent.facebook %}
+                    <a href="{{ talent.facebook }}" target="_blank" class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if talent.linkedin %}
+                    <a href="{{ talent.linkedin }}" target="_blank" class="social-icon linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    {% endif %}
+                    
+                    {% if talent.youtube %}
+                    <a href="{{ talent.youtube }}" target="_blank" class="social-icon youtube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <!-- Main Content -->
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <!-- About Section -->
+                    <div class="talent-section">
+                        <h2 class="mdc-typography--headline5 section-title">About</h2>
+                        <div class="talent-about mdc-typography--body1">
+                            {{ talent.biography|safe }}
+                        </div>
+                    </div>
+                    
+                    <!-- Skills Section -->
+                    {% if talent.skills.exists %}
+                    <div class="talent-section">
+                        <h2 class="mdc-typography--headline5 section-title">Skills</h2>
+                        <div class="talent-skills-list">
+                            {% for skill in talent.skills.all %}
+                            <span class="talent-skill-tag">{{ skill.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Portfolio Section -->
+                    {% if portfolio_items %}
+                    <div class="talent-section">
+                        <h2 class="mdc-typography--headline5 section-title">Portfolio</h2>
+                        <div class="portfolio-grid">
+                            {% for item in portfolio_items %}
+                            <div class="portfolio-item mdc-card">
+                                {% if item.image %}
+                                <div class="portfolio-image">
+                                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                                </div>
+                                {% elif item.video_url %}
+                                <div class="portfolio-video">
+                                    <iframe src="{{ item.video_url|safe }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                {% endif %}
+                                <div class="portfolio-content">
+                                    <h3 class="mdc-typography--headline6">{{ item.title }}</h3>
+                                    {% if item.client %}
+                                    <div class="portfolio-client">
+                                        <i class="material-icons">business</i>
+                                        <span>{{ item.client }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if item.project_date %}
+                                    <div class="portfolio-date">
+                                        <i class="material-icons">event</i>
+                                        <span>{{ item.project_date|date:"F Y" }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if item.description %}
+                                    <div class="portfolio-description mdc-typography--body2">
+                                        {{ item.description }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Testimonials Section -->
+                    {% if testimonials %}
+                    <div class="talent-section">
+                        <h2 class="mdc-typography--headline5 section-title">Testimonials</h2>
+                        <div class="testimonials-list">
+                            {% for testimonial in testimonials %}
+                            <div class="testimonial-item mdc-card">
+                                <div class="testimonial-content">
+                                    <div class="testimonial-rating">
+                                        {% for i in "12345" %}
+                                        <i class="material-icons">{% if forloop.counter <= testimonial.rating %}star{% else %}star_border{% endif %}</i>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="testimonial-text mdc-typography--body1">
+                                        "{{ testimonial.content }}"
+                                    </div>
+                                </div>
+                                <div class="testimonial-author">
+                                    {% if testimonial.client_image %}
+                                    <div class="testimonial-author-image">
+                                        <img src="{{ testimonial.client_image.url }}" alt="{{ testimonial.client_name }}">
+                                    </div>
+                                    {% endif %}
+                                    <div class="testimonial-author-info">
+                                        <div class="testimonial-author-name mdc-typography--subtitle1">
+                                            {{ testimonial.client_name }}
+                                        </div>
+                                        {% if testimonial.client_position or testimonial.client_company %}
+                                        <div class="testimonial-author-position mdc-typography--caption">
+                                            {% if testimonial.client_position %}{{ testimonial.client_position }}{% endif %}
+                                            {% if testimonial.client_position and testimonial.client_company %} at {% endif %}
+                                            {% if testimonial.client_company %}{{ testimonial.client_company }}{% endif %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <!-- Booking Form -->
+                    <div id="booking" class="talent-sidebar-section mdc-card">
+                        <h2 class="mdc-typography--headline5 section-title">Book {{ talent.name }}</h2>
+                        
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="message message-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <form method="post" class="booking-form">
+                            {% csrf_token %}
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input class="mdc-text-field__input" id="{{ booking_form.client_name.id_for_label }}" name="{{ booking_form.client_name.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.client_name.id_for_label }}" class="mdc-floating-label">Your Name</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.client_name.errors %}
+                                <div class="form-error">{{ booking_form.client_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input type="email" class="mdc-text-field__input" id="{{ booking_form.client_email.id_for_label }}" name="{{ booking_form.client_email.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.client_email.id_for_label }}" class="mdc-floating-label">Your Email</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.client_email.errors %}
+                                <div class="form-error">{{ booking_form.client_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input class="mdc-text-field__input" id="{{ booking_form.client_phone.id_for_label }}" name="{{ booking_form.client_phone.html_name }}">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.client_phone.id_for_label }}" class="mdc-floating-label">Your Phone (optional)</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.client_phone.errors %}
+                                <div class="form-error">{{ booking_form.client_phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input class="mdc-text-field__input" id="{{ booking_form.client_company.id_for_label }}" name="{{ booking_form.client_company.html_name }}">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.client_company.id_for_label }}" class="mdc-floating-label">Your Company (optional)</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.client_company.errors %}
+                                <div class="form-error">{{ booking_form.client_company.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input class="mdc-text-field__input" id="{{ booking_form.project_title.id_for_label }}" name="{{ booking_form.project_title.html_name }}" required>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.project_title.id_for_label }}" class="mdc-floating-label">Project Title</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.project_title.errors %}
+                                <div class="form-error">{{ booking_form.project_title.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--textarea mdc-text-field--outlined form-field">
+                                    <textarea class="mdc-text-field__input" id="{{ booking_form.project_description.id_for_label }}" name="{{ booking_form.project_description.html_name }}" rows="4" required></textarea>
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.project_description.id_for_label }}" class="mdc-floating-label">Project Description</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.project_description.errors %}
+                                <div class="form-error">{{ booking_form.project_description.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row date-row">
+                                <div class="date-field">
+                                    <label class="date-label">Start Date</label>
+                                    <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                        <input type="date" class="mdc-text-field__input" id="{{ booking_form.start_date.id_for_label }}" name="{{ booking_form.start_date.html_name }}" required>
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch"></div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if booking_form.start_date.errors %}
+                                    <div class="form-error">{{ booking_form.start_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="date-field">
+                                    <label class="date-label">End Date (optional)</label>
+                                    <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                        <input type="date" class="mdc-text-field__input" id="{{ booking_form.end_date.id_for_label }}" name="{{ booking_form.end_date.html_name }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch"></div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if booking_form.end_date.errors %}
+                                    <div class="form-error">{{ booking_form.end_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="mdc-text-field mdc-text-field--outlined form-field">
+                                    <input type="number" step="0.01" class="mdc-text-field__input" id="{{ booking_form.budget.id_for_label }}" name="{{ booking_form.budget.html_name }}">
+                                    <div class="mdc-notched-outline">
+                                        <div class="mdc-notched-outline__leading"></div>
+                                        <div class="mdc-notched-outline__notch">
+                                            <label for="{{ booking_form.budget.id_for_label }}" class="mdc-floating-label">Budget (optional)</label>
+                                        </div>
+                                        <div class="mdc-notched-outline__trailing"></div>
+                                    </div>
+                                </div>
+                                {% if booking_form.budget.errors %}
+                                <div class="form-error">{{ booking_form.budget.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="mdc-button mdc-button--raised">
+                                    <span class="mdc-button__label">Submit Booking Request</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Information -->
+                    {% if talent.email or talent.phone or talent.website %}
+                    <div class="talent-sidebar-section mdc-card">
+                        <h2 class="mdc-typography--headline6 section-title">Contact Information</h2>
+                        <div class="contact-info">
+                            {% if talent.email %}
+                            <div class="contact-item">
+                                <i class="material-icons">email</i>
+                                <a href="mailto:{{ talent.email }}">{{ talent.email }}</a>
+                            </div>
+                            {% endif %}
+                            
+                            {% if talent.phone %}
+                            <div class="contact-item">
+                                <i class="material-icons">phone</i>
+                                <a href="tel:{{ talent.phone }}">{{ talent.phone }}</a>
+                            </div>
+                            {% endif %}
+                            
+                            {% if talent.website %}
+                            <div class="contact-item">
+                                <i class="material-icons">language</i>
+                                <a href="{{ talent.website }}" target="_blank">{{ talent.website }}</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Similar Talents -->
+                    {% if similar_talents %}
+                    <div class="talent-sidebar-section mdc-card">
+                        <h2 class="mdc-typography--headline6 section-title">Similar Talents</h2>
+                        <div class="similar-talents">
+                            {% for similar in similar_talents %}
+                            <div class="similar-talent-item">
+                                <a href="{{ similar.get_absolute_url }}" class="similar-talent-link">
+                                    {% if similar.profile_image %}
+                                    <div class="similar-talent-image">
+                                        <img src="{{ similar.profile_image.url }}" alt="{{ similar.name }}">
+                                    </div>
+                                    {% else %}
+                                    <div class="similar-talent-image similar-talent-placeholder">
+                                        <i class="material-icons">person</i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="similar-talent-info">
+                                        <div class="similar-talent-name mdc-typography--subtitle1">{{ similar.name }}</div>
+                                        <div class="similar-talent-categories">
+                                            {% for category in similar.categories.all|slice:":1" %}
+                                            <span class="similar-talent-category">{{ category.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Availability Calendar -->
+                    {% if talent.show_availability and availability_dates %}
+                    <div class="talent-sidebar-section mdc-card">
+                        <h2 class="mdc-typography--headline6 section-title">Availability</h2>
+                        <div class="availability-calendar">
+                            <div class="calendar-header">
+                                <div class="calendar-month">{{ current_month_name }} {{ current_year }}</div>
+                                <div class="calendar-nav">
+                                    <a href="?month={{ prev_month }}&year={{ prev_year }}#availability" class="calendar-nav-btn">
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                    <a href="?month={{ next_month }}&year={{ next_year }}#availability" class="calendar-nav-btn">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="calendar-grid">
+                                <div class="calendar-day-header">Mon</div>
+                                <div class="calendar-day-header">Tue</div>
+                                <div class="calendar-day-header">Wed</div>
+                                <div class="calendar-day-header">Thu</div>
+                                <div class="calendar-day-header">Fri</div>
+                                <div class="calendar-day-header">Sat</div>
+                                <div class="calendar-day-header">Sun</div>
+                                
+                                {% for day in calendar_days %}
+                                <div class="calendar-day {% if day.padding %}padding{% endif %} {% if day.today %}today{% endif %} {% if day.available %}available{% endif %} {% if day.booked %}booked{% endif %}">
+                                    {% if not day.padding %}
+                                    <div class="calendar-day-number">{{ day.day }}</div>
+                                    {% if day.booked %}
+                                    <div class="calendar-day-status booked">Booked</div>
+                                    {% elif day.available %}
+                                    <div class="calendar-day-status available">Available</div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="calendar-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color available"></div>
+                                    <div class="legend-label">Available</div>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color booked"></div>
+                                    <div class="legend-label">Booked</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Tags/Keywords -->
+                    {% if talent.tags.exists %}
+                    <div class="talent-sidebar-section mdc-card">
+                        <h2 class="mdc-typography--headline6 section-title">Tags</h2>
+                        <div class="talent-tags">
+                            {% for tag in talent.tags.all %}
+                            <a href="{% url 'talent:talent_list' %}?tag={{ tag.slug }}" class="talent-tag">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Projects -->
+{% if related_projects %}
+<div class="related-projects-section">
+    <div class="container">
+        <h2 class="mdc-typography--headline4 section-title">Related Projects</h2>
+        <div class="related-projects-grid">
+            {% for project in related_projects %}
+            <div class="related-project-card mdc-card">
+                {% if project.featured_image %}
+                <div class="project-image">
+                    <img src="{{ project.featured_image.url }}" alt="{{ project.title }}">
+                </div>
+                {% endif %}
+                <div class="project-content">
+                    <h3 class="mdc-typography--headline6">
+                        <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
+                    </h3>
+                    <div class="project-meta">
+                        {% if project.client %}
+                        <div class="project-meta-item">
+                            <i class="material-icons">business</i>
+                            <span>{{ project.client }}</span>
+                        </div>
+                        {% endif %}
+                        {% if project.completion_date %}
+                        <div class="project-meta-item">
+                            <i class="material-icons">event</i>
+                            <span>{{ project.completion_date|date:"F Y" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="project-description mdc-typography--body2">
+                        {{ project.description|truncatewords:25 }}
+                    </div>
+                    <div class="project-talents">
+                        <div class="project-talents-label">Talents:</div>
+                        <div class="project-talents-list">
+                            {% for talent in project.talents.all %}
+                            <a href="{{ talent.get_absolute_url }}" class="project-talent">
+                                {% if talent.profile_image %}
+                                <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                                {% else %}
+                                <div class="project-talent-placeholder">
+                                    <i class="material-icons">person</i>
+                                </div>
+                                {% endif %}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <a href="{{ project.get_absolute_url }}" class="mdc-button">
+                        <span class="mdc-button__label">View Project</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Call to Action -->
+<div class="talent-cta-section">
+    <div class="container">
+        <div class="talent-cta mdc-card">
+            <div class="cta-content">
+                <h2 class="mdc-typography--headline4">Ready to work with {{ talent.name }}?</h2>
+                <p class="mdc-typography--body1">Book now to secure your spot in {{ talent.name }}'s schedule.</p>
+                <a href="#booking" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__label">Book Now</span>
+                </a>
+            </div>
+            <div class="cta-image">
+                {% if talent.profile_image %}
+                <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                {% else %}
+                <div class="cta-image-placeholder">
+                    <i class="material-icons">person</i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Initialize Material Components -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize text fields
+        var textFields = document.querySelectorAll('.mdc-text-field');
+        for (var i = 0; i < textFields.length; i++) {
+            new mdc.textField.MDCTextField(textFields[i]);
+        }
+        
+        // Smooth scroll for booking link
+        document.querySelector('a[href="#booking"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#booking').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+{% endblock %}

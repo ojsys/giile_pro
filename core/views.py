@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 from .models import AboutPage, SiteSettings, HomePage
-from blog.models import Post  # Import the Post model
+from blog.models import Post  
+from events.models import Event
+from django.utils import timezone
 
 def home_view(request):
     """View for the home page."""
@@ -10,7 +12,11 @@ def home_view(request):
     
     # Get related content with safe empty defaults
     services = home.services.all().order_by('order') if hasattr(home, 'services') else []
-    events = home.events.all().order_by('order') if hasattr(home, 'events') else []
+    now = timezone.now()
+    upcoming_events = Event.objects.filter(
+            start_date__gte=now,
+            status__in=['upcoming', 'ongoing']
+        ).order_by('start_date')[:3]
     
     # Get the latest 3 published blog posts
     latest_posts = Post.objects.filter(status='published').order_by('-published_at')[:3]
@@ -19,7 +25,7 @@ def home_view(request):
         'home': home,
         'settings': settings,
         'services': services,
-        'events': events,
+        'events': upcoming_events,
         'latest_posts': latest_posts,  # Add latest posts to context
     }
     return render(request, 'core/home.html', context)

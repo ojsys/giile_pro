@@ -1,0 +1,591 @@
+{% extends "talent/base.html" %}
+{% load static %}
+
+{% block title %}{% if is_create %}Create{% else %}Edit{% endif %} Talent Profile - {{ settings.site_title }}{% endblock %}
+
+{% block talent_content %}
+<div class="talent-profile-form">
+    <div class="container py-5">
+        <div class="form-header mb-4">
+            <h1 class="mdc-typography--headline3">{% if is_create %}Create{% else %}Edit{% endif %} Your Talent Profile</h1>
+            <p class="mdc-typography--body1 text-muted">Complete your profile to showcase your skills and attract potential clients.</p>
+            {% if not is_create %}
+            <div class="form-actions">
+                <a href="{% url 'talent:talent_dashboard' %}" class="mdc-button">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon">arrow_back</i>
+                    <span class="mdc-button__label">Back to Dashboard</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="mdc-card">
+            <div class="mdc-card__content p-4">
+                <form method="post" enctype="multipart/form-data" class="talent-form">
+                    {% csrf_token %}
+                    
+                    <!-- Basic Information Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Basic Information</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">person</i>
+                                        <input type="text" class="mdc-text-field__input" 
+                                               id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" 
+                                               value="{{ form.name.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.name.id_for_label }}" class="mdc-floating-label">{{ form.name.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.name.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.name.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea w-100 mb-1">
+                                        <textarea class="mdc-text-field__input" 
+                                                  id="{{ form.short_bio.id_for_label }}" name="{{ form.short_bio.html_name }}" 
+                                                  rows="2">{{ form.short_bio.value|default:'' }}</textarea>
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.short_bio.id_for_label }}" class="mdc-floating-label">{{ form.short_bio.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.short_bio.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.short_bio.errors.0 }}</div>
+                                    </div>
+                                    {% else %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text">A brief introduction that will appear in search results (max 150 characters)</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea w-100 mb-1">
+                                        <textarea class="mdc-text-field__input" 
+                                                  id="{{ form.biography.id_for_label }}" name="{{ form.biography.html_name }}" 
+                                                  rows="6">{{ form.biography.value|default:'' }}</textarea>
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.biography.id_for_label }}" class="mdc-floating-label">{{ form.biography.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.biography.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.biography.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Images Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Profile Images</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="image-upload-container">
+                                        <label class="mdc-typography--subtitle1">Profile Image</label>
+                                        <div class="image-preview-container mb-3 text-center">
+                                            <div class="image-preview rounded" style="height: 200px; width: 200px; margin: 0 auto; overflow: hidden; position: relative; background-color: #f5f5f5;">
+                                                {% if form.profile_image.value %}
+                                                <img src="{{ form.profile_image.value.url }}" alt="Profile Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                                {% else %}
+                                                <div class="placeholder-content d-flex align-items-center justify-content-center h-100">
+                                                    <i class="material-icons" style="font-size: 64px; color: #757575;">person</i>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="mdc-file">
+                                                <button class="mdc-button mdc-button--outlined file-button" type="button">
+                                                    <span class="mdc-button__ripple"></span>
+                                                    <i class="material-icons mdc-button__icon">upload_file</i>
+                                                    <span class="mdc-button__label">Choose File</span>
+                                                </button>
+                                                <input type="file" class="file-input" 
+                                                       id="{{ form.profile_image.id_for_label }}" name="{{ form.profile_image.html_name }}">
+                                                <span class="file-name mdc-typography--body2 ml-2">No file chosen</span>
+                                            </div>
+                                            {% if form.profile_image.errors %}
+                                            <div class="mdc-text-field-helper-line">
+                                                <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.profile_image.errors.0 }}</div>
+                                            </div>
+                                            {% else %}
+                                            <div class="mdc-text-field-helper-line">
+                                                <div class="mdc-text-field-helper-text">Recommended size: 500x500px</div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="image-upload-container">
+                                        <label class="mdc-typography--subtitle1">Cover Image</label>
+                                        <div class="image-preview-container mb-3">
+                                            <div class="image-preview rounded" style="height: 150px; overflow: hidden; position: relative; background-color: #f5f5f5;">
+                                                {% if form.cover_image.value %}
+                                                <img src="{{ form.cover_image.value.url }}" alt="Cover Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                                {% else %}
+                                                <div class="placeholder-content d-flex align-items-center justify-content-center h-100">
+                                                    <i class="material-icons" style="font-size: 64px; color: #757575;">image</i>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="mdc-file">
+                                                <button class="mdc-button mdc-button--outlined file-button" type="button">
+                                                    <span class="mdc-button__ripple"></span>
+                                                    <i class="material-icons mdc-button__icon">upload_file</i>
+                                                    <span class="mdc-button__label">Choose File</span>
+                                                </button>
+                                                <input type="file" class="file-input" 
+                                                       id="{{ form.cover_image.id_for_label }}" name="{{ form.cover_image.html_name }}">
+                                                <span class="file-name mdc-typography--body2 ml-2">No file chosen</span>
+                                            </div>
+                                            {% if form.cover_image.errors %}
+                                            <div class="mdc-text-field-helper-line">
+                                                <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.cover_image.errors.0 }}</div>
+                                            </div>
+                                            {% else %}
+                                            <div class="mdc-text-field-helper-line">
+                                                <div class="mdc-text-field-helper-text">Recommended size: 1200x400px</div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Professional Information Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Professional Information</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">work</i>
+                                        <input type="number" class="mdc-text-field__input" 
+                                               id="{{ form.years_of_experience.id_for_label }}" name="{{ form.years_of_experience.html_name }}" 
+                                               value="{{ form.years_of_experience.value|default:'' }}" min="0">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.years_of_experience.id_for_label }}" class="mdc-floating-label">{{ form.years_of_experience.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.years_of_experience.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.years_of_experience.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">attach_money</i>
+                                        <input type="number" class="mdc-text-field__input" 
+                                               id="{{ form.hourly_rate.id_for_label }}" name="{{ form.hourly_rate.html_name }}" 
+                                               value="{{ form.hourly_rate.value|default:'' }}" min="0">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.hourly_rate.id_for_label }}" class="mdc-floating-label">{{ form.hourly_rate.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.hourly_rate.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.hourly_rate.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">location_on</i>
+                                        <input type="text" class="mdc-text-field__input" 
+                                               id="{{ form.location.id_for_label }}" name="{{ form.location.html_name }}" 
+                                               value="{{ form.location.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.location.id_for_label }}" class="mdc-floating-label">{{ form.location.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.location.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.location.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <label class="mdc-typography--subtitle1 mb-2 d-block">Categories</label>
+                                    <div class="categories-container p-3 border rounded" style="max-height: 200px; overflow-y: auto; background-color: #f5f5f5;">
+                                        {% for choice in form.categories %}
+                                        <div class="mdc-form-field mb-2">
+                                            <div class="mdc-checkbox">
+                                                {{ choice.tag }}
+                                                <div class="mdc-checkbox__background">
+                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                                    </svg>
+                                                    <div class="mdc-checkbox__mixedmark"></div>
+                                                </div>
+                                                <div class="mdc-checkbox__ripple"></div>
+                                            </div>
+                                            <label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if form.categories.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.categories.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <label class="mdc-typography--subtitle1 mb-2 d-block">Skills</label>
+                                    <div class="skills-container p-3 border rounded" style="max-height: 200px; overflow-y: auto; background-color: #f5f5f5;">
+                                        {% for choice in form.skills %}
+                                        <div class="mdc-form-field mb-2">
+                                            <div class="mdc-checkbox">
+                                                {{ choice.tag }}
+                                                <div class="mdc-checkbox__background">
+                                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                                                    </svg>
+                                                    <div class="mdc-checkbox__mixedmark"></div>
+                                                </div>
+                                                <div class="mdc-checkbox__ripple"></div>
+                                            </div>
+                                            <label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if form.skills.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.skills.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Information Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Contact Information</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">email</i>
+                                        <input type="email" class="mdc-text-field__input" 
+                                               id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" 
+                                               value="{{ form.email.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.email.id_for_label }}" class="mdc-floating-label">{{ form.email.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.email.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.email.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">phone</i>
+                                        <input type="tel" class="mdc-text-field__input" 
+                                               id="{{ form.phone.id_for_label }}" name="{{ form.phone.html_name }}" 
+                                               value="{{ form.phone.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.phone.id_for_label }}" class="mdc-floating-label">{{ form.phone.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.phone.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.phone.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">language</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.website.id_for_label }}" name="{{ form.website.html_name }}" 
+                                               value="{{ form.website.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.website.id_for_label }}" class="mdc-floating-label">{{ form.website.label }}</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                    {% if form.website.errors %}
+                                    <div class="mdc-text-field-helper-line">
+                                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--error">{{ form.website.errors.0 }}</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Social Media</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">photo_camera</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.instagram.id_for_label }}" name="{{ form.instagram.html_name }}" 
+                                               value="{{ form.instagram.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.instagram.id_for_label }}" class="mdc-floating-label">Instagram</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">alternate_email</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.twitter.id_for_label }}" name="{{ form.twitter.html_name }}" 
+                                               value="{{ form.twitter.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.twitter.id_for_label }}" class="mdc-floating-label">Twitter</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">thumb_up</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.facebook.id_for_label }}" name="{{ form.facebook.html_name }}" 
+                                               value="{{ form.facebook.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.facebook.id_for_label }}" class="mdc-floating-label">Facebook</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">business</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.linkedin.id_for_label }}" name="{{ form.linkedin.html_name }}" 
+                                               value="{{ form.linkedin.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.linkedin.id_for_label }}" class="mdc-floating-label">LinkedIn</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+                                    <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-leading-icon w-100 mb-1">
+                                        <i class="material-icons mdc-text-field__icon">videocam</i>
+                                        <input type="url" class="mdc-text-field__input" 
+                                               id="{{ form.youtube.id_for_label }}" name="{{ form.youtube.html_name }}" 
+                                               value="{{ form.youtube.value|default:'' }}">
+                                        <div class="mdc-notched-outline">
+                                            <div class="mdc-notched-outline__leading"></div>
+                                            <div class="mdc-notched-outline__notch">
+                                                <label for="{{ form.youtube.id_for_label }}" class="mdc-floating-label">YouTube</label>
+                                            </div>
+                                            <div class="mdc-notched-outline__trailing"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Availability Section -->
+                    <div class="form-section mb-5">
+                        <h2 class="mdc-typography--headline5 mb-4 pb-2 border-bottom">Availability</h2>
+                        
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    <div class="mdc-form-field">
+                                        <div class="mdc-switch">
+                                            <div class="mdc-switch__track"></div>
+                                            <div class="mdc-switch__thumb-underlay">
+                                                <div class="mdc-switch__thumb"></div>
+                                                <input type="checkbox" id="{{ form.show_availability.id_for_label }}" 
+                                                       name="{{ form.show_availability.html_name }}" 
+                                                       class="mdc-switch__native-control" role="switch"
+                                                       {% if form.show_availability.value %}checked{% endif %}>
+                                            </div>
+                                        </div>
+                                        <label for="{{ form.show_availability.id_for_label }}">{{ form.show_availability.label }}</label>
+                                    </div>
+                                    <div class="mdc-typography--caption mt-1">Show availability calendar on your profile</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="form-actions text-center pt-4">
+                        <button type="submit" class="mdc-button mdc-button--raised mdc-button--primary">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">{% if is_create %}Create Profile{% else %}Save Changes{% endif %}</span>
+                        </button>
+                        {% if not is_create %}
+                        <a href="{% url 'talent:talent_dashboard' %}" class="mdc-button mdc-button--outlined ms-3">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Cancel</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize all MDC components
+        const textFields = document.querySelectorAll('.mdc-text-field');
+        textFields.forEach(textField => {
+            mdc.textField.MDCTextField.attachTo(textField);
+        });
+        
+        const switches = document.querySelectorAll('.mdc-switch');
+        switches.forEach(switchControl => {
+            mdc.switchControl.MDCSwitch.attachTo(switchControl);
+        });
+        
+        const checkboxes = document.querySelectorAll('.mdc-checkbox');
+        checkboxes.forEach(checkbox => {
+            mdc.checkbox.MDCCheckbox.attachTo(checkbox);
+        });
+        
+        const buttons = document.querySelectorAll('.mdc-button');
+        buttons.forEach(button => {
+            mdc.ripple.MDCRipple.attachTo(button);
+        });
+        
+        // File input custom styling
+        document.querySelectorAll('.file-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const fileInput = this.parentElement.querySelector('.file-input');
+                fileInput.click();
+            });
+        });
+        
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+                this.parentElement.querySelector('.file-name').textContent = fileName;
+            });
+        });
+        
+        // Image preview functionality
+        const setupImagePreview = (inputId, previewSelector) => {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) return;
+                
+                const preview = document.querySelector(previewSelector);
+                if (!preview) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (preview.querySelector('img')) {
+                        preview.querySelector('img').src = e.target.result;
+                    } else {
+                        preview.innerHTML = '';
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Image Preview';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        preview.appendChild(img);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+        
+        // Setup image previews
+        setupImagePreview('{{ form.profile_image.id_for_label }}', '.mdc-layout-grid__cell:nth-child(1) .image-preview');
+        setupImagePreview('{{ form.cover_image.id_for_label }}', '.mdc-layout-grid__cell:nth-child(2) .image-preview');
+    });
+</script>
+{% endblock %}

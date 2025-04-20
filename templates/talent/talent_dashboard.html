@@ -1,0 +1,276 @@
+{% extends "talent/base.html" %}
+{% load static %}
+
+{% block title %}Talent Dashboard - {{ settings.site_title }}{% endblock %}
+
+{% block talent_content %}
+<div class="talent-dashboard">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1 class="mdc-typography--headline4">Talent Dashboard</h1>
+            <div class="dashboard-actions">
+                <a href="{% url 'talent:talent_profile_edit' %}" class="mdc-button mdc-button--raised">
+                    <i class="material-icons mdc-button__icon">edit</i>
+                    <span class="mdc-button__label">Edit Profile</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <!-- Dashboard Sidebar -->
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="dashboard-sidebar">
+                        <div class="dashboard-profile-card mdc-card">
+                            <div class="profile-card-header">
+                                {% if talent.profile_image %}
+                                <div class="profile-image">
+                                    <img src="{{ talent.profile_image.url }}" alt="{{ talent.name }}">
+                                </div>
+                                {% else %}
+                                <div class="profile-image profile-placeholder">
+                                    <i class="material-icons">person</i>
+                                </div>
+                                {% endif %}
+                                <div class="profile-info">
+                                    <h2 class="mdc-typography--headline6">{{ talent.name }}</h2>
+                                    <div class="profile-categories">
+                                        {% for category in talent.categories.all|slice:":2" %}
+                                        <span class="profile-category">{{ category.name }}</span>
+                                        {% endfor %}
+                                        {% if talent.categories.count > 2 %}
+                                        <span class="profile-category more-categories">+{{ talent.categories.count|add:"-2" }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-card-actions">
+                                <a href="{{ talent.get_absolute_url }}" class="mdc-button">
+                                    <i class="material-icons mdc-button__icon">visibility</i>
+                                    <span class="mdc-button__label">View Public Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-nav mdc-card">
+                            <nav class="dashboard-nav-list">
+                                <a href="#bookings" class="dashboard-nav-item active">
+                                    <i class="material-icons">event</i>
+                                    <span>Bookings</span>
+                                </a>
+                                <a href="#portfolio" class="dashboard-nav-item">
+                                    <i class="material-icons">work</i>
+                                    <span>Portfolio</span>
+                                </a>
+                                <a href="#testimonials" class="dashboard-nav-item">
+                                    <i class="material-icons">star</i>
+                                    <span>Testimonials</span>
+                                </a>
+                                <a href="#availability" class="dashboard-nav-item">
+                                    <i class="material-icons">today</i>
+                                    <span>Availability</span>
+                                </a>
+                                <a href="#settings" class="dashboard-nav-item">
+                                    <i class="material-icons">settings</i>
+                                    <span>Settings</span>
+                                </a>
+                            </nav>
+                        </div>
+                        
+                        <div class="dashboard-stats mdc-card">
+                            <h3 class="mdc-typography--subtitle1">Profile Stats</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ profile_views }}</div>
+                                    <div class="stat-label">Profile Views</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ booking_requests.count }}</div>
+                                    <div class="stat-label">Booking Requests</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ completed_bookings }}</div>
+                                    <div class="stat-label">Completed</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ profile_completion }}%</div>
+                                    <div class="stat-label">Profile Completion</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Content -->
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
+                    <div class="dashboard-content">
+                        <!-- Bookings Section -->
+                        <div id="bookings" class="dashboard-section active">
+                            <div class="section-header">
+                                <h2 class="mdc-typography--headline5">Booking Requests</h2>
+                                <div class="section-actions">
+                                    <div class="mdc-tab-bar" role="tablist">
+                                        <div class="mdc-tab-scroller">
+                                            <div class="mdc-tab-scroller__scroll-area">
+                                                <div class="mdc-tab-scroller__scroll-content">
+                                                    <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                                                        <span class="mdc-tab__content">
+                                                            <span class="mdc-tab__text-label">Pending</span>
+                                                        </span>
+                                                        <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                                                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                                        </span>
+                                                        <span class="mdc-tab__ripple"></span>
+                                                    </button>
+                                                    <button class="mdc-tab" role="tab" aria-selected="false" tabindex="-1">
+                                                        <span class="mdc-tab__content">
+                                                            <span class="mdc-tab__text-label">Confirmed</span>
+                                                        </span>
+                                                        <span class="mdc-tab-indicator">
+                                                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                                        </span>
+                                                        <span class="mdc-tab__ripple"></span>
+                                                    </button>
+                                                    <button class="mdc-tab" role="tab" aria-selected="false" tabindex="-1">
+                                                        <span class="mdc-tab__content">
+                                                            <span class="mdc-tab__text-label">Completed</span>
+                                                        </span>
+                                                        <span class="mdc-tab-indicator">
+                                                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                                                        </span>
+                                                        <span class="mdc-tab__ripple"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-content active" data-tab="pending">
+                                {% if pending_bookings %}
+                                <div class="bookings-list">
+                                    {% for booking in pending_bookings %}
+                                    <div class="booking-item mdc-card">
+                                        <div class="booking-header">
+                                            <div class="booking-title">
+                                                <h3 class="mdc-typography--headline6">{{ booking.project_title }}</h3>
+                                                <div class="booking-status pending">Pending</div>
+                                            </div>
+                                            <div class="booking-date">
+                                                <i class="material-icons">event</i>
+                                                <span>{{ booking.created_at|date:"M d, Y" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="booking-content">
+                                            <div class="booking-client">
+                                                <div class="booking-client-label">Client:</div>
+                                                <div class="booking-client-info">
+                                                    <div class="client-name">{{ booking.client_name }}</div>
+                                                    <div class="client-email">{{ booking.client_email }}</div>
+                                                    {% if booking.client_company %}
+                                                    <div class="client-company">{{ booking.client_company }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="booking-details">
+                                                <div class="booking-dates">
+                                                    <i class="material-icons">date_range</i>
+                                                    <span>{{ booking.start_date|date:"M d, Y" }}
+                                                    {% if booking.end_date %} - {{ booking.end_date|date:"M d, Y" }}{% endif %}</span>
+                                                </div>
+                                                {% if booking.budget %}
+                                                <div class="booking-budget">
+                                                    <i class="material-icons">attach_money</i>
+                                                    <span>${{ booking.budget }}</span>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="booking-description">
+                                                <p>{{ booking.project_description|truncatewords:30 }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="booking-actions">
+                                            <a href="{% url 'talent:booking_detail' booking.id %}" class="mdc-button">
+                                                <span class="mdc-button__label">View Details</span>
+                                            </a>
+                                            <form method="post" action="{% url 'talent:booking_accept' booking.id %}" class="inline-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="mdc-button mdc-button--raised">
+                                                    <span class="mdc-button__label">Accept</span>
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{% url 'talent:booking_decline' booking.id %}" class="inline-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="mdc-button mdc-button--outlined">
+                                                    <span class="mdc-button__label">Decline</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i class="material-icons">event_busy</i>
+                                    </div>
+                                    <h3 class="mdc-typography--headline6">No Pending Bookings</h3>
+                                    <p class="mdc-typography--body1">You don't have any pending booking requests at the moment.</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Additional tab content sections would go here -->
+                        </div>
+                        
+                        <!-- Additional dashboard sections would go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tabs
+        var tabBar = new mdc.tabBar.MDCTabBar(document.querySelector('.mdc-tab-bar'));
+        
+        // Handle tab switching
+        tabBar.listen('MDCTabBar:activated', function(event) {
+            var tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            var tabs = ['pending', 'confirmed', 'completed'];
+            var activeTab = tabs[event.detail.index];
+            document.querySelector('.tab-content[data-tab="' + activeTab + '"]').classList.add('active');
+        });
+        
+        // Handle dashboard navigation
+        var navItems = document.querySelectorAll('.dashboard-nav-item');
+        var sections = document.querySelectorAll('.dashboard-section');
+        
+        navItems.forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav items and sections
+                navItems.forEach(function(navItem) {
+                    navItem.classList.remove('active');
+                });
+                sections.forEach(function(section) {
+                    section.classList.remove('active');
+                });
+                
+                // Add active class to clicked nav item and corresponding section
+                this.classList.add('active');
+                var targetId = this.getAttribute('href').substring(1);
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "events/base.html" %}
+{% load static %}
+
+{% block title %}{{ settings.site_title }} - Events{% endblock %}
+
+{% block events_content %}
+<div class="events-list">
+    <h1 class="mdc-typography--headline3 page-title">Events</h1>
+    
+    {% if featured_events %}
+    <div class="featured-events">
+        <h2 class="mdc-typography--headline5 section-title">Featured Events</h2>
+        <div class="featured-events-grid">
+            {% for event in featured_events %}
+            <div class="featured-event-card mdc-card">
+                {% if event.featured_image %}
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ event.featured_image.url }}');">
+                    <div class="mdc-card__media-content">
+                        <div class="event-status-badge status-{{ event.status }}">{{ event.get_status_display }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="mdc-card__content">
+                    <div class="event-meta">
+                        <span class="event-date mdc-typography--caption">
+                            <i class="material-icons">event</i> {{ event.formatted_date }}
+                        </span>
+                        <span class="event-location mdc-typography--caption">
+                            <i class="material-icons">location_on</i> {{ event.location }}
+                        </span>
+                    </div>
+                    <h3 class="mdc-typography--headline5 event-title">
+                        <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+                    </h3>
+                    <div class="event-excerpt mdc-typography--body2">
+                        {{ event.short_description|truncatewords:30 }}
+                    </div>
+                </div>
+                <div class="mdc-card__actions">
+                    <a href="{{ event.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                        <span class="mdc-button__label">View Details</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="all-events">
+        {% if selected_category %}
+        <h2 class="mdc-typography--headline5 section-title">Events in {{ category.name }}</h2>
+        {% elif selected_status %}
+        <h2 class="mdc-typography--headline5 section-title">{{ selected_status|title }} Events</h2>
+        {% else %}
+        <h2 class="mdc-typography--headline5 section-title">All Events</h2>
+        {% endif %}
+        
+        <div class="events-grid">
+            {% for event in events %}
+            <div class="event-card mdc-card">
+                <div class="event-status-badge status-{{ event.status }}">{{ event.get_status_display }}</div>
+                {% if event.featured_image %}
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('{{ event.featured_image.url }}');">
+                    <div class="mdc-card__media-content"></div>
+                </div>
+                {% endif %}
+                <div class="mdc-card__content">
+                    <div class="event-meta">
+                        <span class="event-date mdc-typography--caption">
+                            <i class="material-icons">event</i> {{ event.formatted_date }}
+                        </span>
+                        <span class="event-location mdc-typography--caption">
+                            <i class="material-icons">location_on</i> {{ event.location }}
+                        </span>
+                    </div>
+                    <h3 class="mdc-typography--headline6 event-title">
+                        <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+                    </h3>
+                    <div class="event-excerpt mdc-typography--body2">
+                        {{ event.short_description|truncatewords:20 }}
+                    </div>
+                </div>
+                <div class="mdc-card__actions">
+                    <a href="{{ event.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                        <span class="mdc-button__label">View Details</span>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-events">
+                <p class="mdc-typography--body1">No events found.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="pagination">
+            <div class="pagination-inner">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="mdc-button">
+                    <span class="mdc-button__label">Previous</span>
+                </a>
+                {% endif %}
+                
+                <span class="current-page mdc-typography--body1">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="mdc-button">
+                    <span class="mdc-button__label">Next</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

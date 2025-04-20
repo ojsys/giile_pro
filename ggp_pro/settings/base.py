@@ -29,10 +29,10 @@ INSTALLED_APPS = [
     # Local apps
     'accounts',
     'core',
-    #'talent',
+    'talent',
     #'music',
     #'movies',
-    #'events',
+    'events',
     'blog',
     #'api',
 ]

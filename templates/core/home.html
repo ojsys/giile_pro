@@ -80,49 +80,63 @@
 </section>
 
 <section class="events">
-    <div class="container">
-        <h2 class="mdc-typography--headline3 section-title">{{ home.events_title }}</h2>
-        <div class="mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-                {% for event in home.events.all %}
-                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-phone">
-                    <div class="mdc-card event-card" style="padding: 20px;">
-                        <div class="mdc-card__content">
-                            <h5 class="mdc-typography--headline5">{{ event.title }}</h5>
-                            <div class="event-details">
-                                <div class="event-detail">
-                                    <i class="material-icons">event</i>
-                                    <span class="mdc-typography--body2">{{ event.date }}</span>
-                                </div>
-                                <div class="event-detail">
-                                    <i class="material-icons">location_on</i>
-                                    <span class="mdc-typography--body2">{{ event.location }}</span>
-                                </div>
-                            </div>
+    <!-- Events Section -->
+    <section class="events-section section-padding">
+        <div class="container">
+            <h2 class="mdc-typography--headline3 section-title">{{ home.events_title }}</h2>
+            
+            <div class="events-home-list">
+                {% for event in events %}
+                <div class="event-home-card mdc-card">
+                    <div class="event-home-content">
+                        <div class="event-status-badge status-{{ event.status }}">{{ event.get_status_display }}</div>
+                        <div class="event-meta">
+                            <span class="event-date mdc-typography--caption">
+                                <i class="material-icons">event</i> {{ event.formatted_date }}
+                            </span>
+                            <span class="event-location mdc-typography--caption">
+                                <i class="material-icons">location_on</i> {{ event.location }}
+                            </span>
                         </div>
-                        <div class="mdc-card__actions">
-                            <div class="mdc-card__action-buttons">
-                                <a href="{{ event.button_url }}" class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button">
-                                    <span class="mdc-button__ripple"></span>
-                                    <span class="mdc-button__label">{{ event.button_text }}</span>
-                                </a>
-                            </div>
+                        <h3 class="mdc-typography--headline5 event-title">
+                            <a href="{{ event.get_absolute_url }}">{{ event.title }}</a>
+                        </h3>
+                        <div class="event-excerpt mdc-typography--body2">
+                            {{ event.short_description|truncatewords:25 }}
                         </div>
+                        <div class="event-actions">
+                            <a href="{{ event.get_absolute_url }}" class="mdc-button mdc-button--raised">
+                                <span class="mdc-button__label">View Details</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="event-home-image">
+                        {% if event.featured_image %}
+                        <div class="event-image-container" style="background-image: url('{{ event.featured_image.url }}');">
+                        </div>
+                        {% else %}
+                        <div class="event-image-container event-image-placeholder">
+                            <i class="material-icons">event</i>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% empty %}
-                <!-- Default events if none are created yet -->
+                <div class="no-events">
+                    <p class="mdc-typography--body1 text-center">No upcoming events.</p>
+                </div>
                 {% endfor %}
             </div>
+            
+            {% if home.events_button_text %}
+            <div class="text-center mt-4" style="margin-top: 5rem;">
+                <a href="{% url 'events:event_list' %}" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__label">{{ home.events_button_text }}</span>
+                </a>
+            </div>
+            {% endif %}
         </div>
-        <div class="view-all-link">
-            <a href="{{ home.events_button_url }}" class="mdc-button">
-                <span class="mdc-button__ripple"></span>
-                <span class="mdc-button__label">{{ home.events_button_text }}</span>
-                <i class="material-icons mdc-button__icon" aria-hidden="true">arrow_forward</i>
-            </a>
-        </div>
-    </div>
+    </section>
 </section>
 
 <section class="blog section-margin section-padding">
